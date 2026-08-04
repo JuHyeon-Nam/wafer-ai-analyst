@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Local data
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Generated outputs
+reports/*.html
+reports/*.pdf
+reports/figures/*
+!reports/figures/.gitkeep
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
+
