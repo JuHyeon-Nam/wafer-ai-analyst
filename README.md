@@ -255,9 +255,10 @@ streamlit run app.py
 - [x] Project directory structure
 - [x] Team README rewrite
 - [x] Day 1 dataset audit
-- [x] CSV/Excel parser baseline
-- [x] Device-level feature extraction baseline
-- [x] Rule-based anomaly detection baseline
+- [x] Day 2 parser metadata export
+- [x] Day 3 curve normalization export
+- [x] Day 4 feature engineering expansion
+- [x] Review status and anomaly score baseline
 - [ ] Dashboard refinement
 - [ ] AI explanation prompt module
 - [ ] Automated report generation
@@ -277,6 +278,8 @@ streamlit run app.py
 ## Documents
 
 - [`docs/DAY1_DATA_AUDIT.md`](docs/DAY1_DATA_AUDIT.md)
+- [`docs/DAY2_PARSER_METADATA.md`](docs/DAY2_PARSER_METADATA.md)
+- [`docs/DAY3_CURVE_NORMALIZATION.md`](docs/DAY3_CURVE_NORMALIZATION.md)
+- [`docs/DAY4_FEATURE_ENGINEERING.md`](docs/DAY4_FEATURE_ENGINEERING.md)
 - [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md)
 - [`docs/GITHUB_SETUP.md`](docs/GITHUB_SETUP.md)
-

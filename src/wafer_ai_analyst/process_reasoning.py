@@ -22,6 +22,22 @@ ISSUE_MAP = {
         "contact instability",
         "non-ideal diode behavior",
     ],
+    "diode_current_variation": [
+        "junction variation",
+        "series resistance shift",
+        "probe contact variation",
+        "pattern CD variation",
+    ],
+    "capacitance_variation": [
+        "oxide thickness variation",
+        "deposition non-uniformity",
+        "etch variation",
+    ],
+    "resistance_shift": [
+        "thin film thickness variation",
+        "line width variation",
+        "contact resistance variation",
+    ],
 }
 
 
@@ -33,4 +49,3 @@ def infer_process_candidates(flags: str) -> str:
         candidates.extend(ISSUE_MAP.get(flag, []))
     deduped = list(dict.fromkeys(candidates))
     return ", ".join(deduped) if deduped else "engineering review required"
-

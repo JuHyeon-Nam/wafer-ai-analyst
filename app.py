@@ -26,14 +26,30 @@ if st.button("분석 실행"):
 
 if "result" in st.session_state:
     result = st.session_state["result"]
+    total, normal, review, priority = st.columns(4)
+    total.metric("Measurements", len(result))
+    normal.metric("Normal", int(result["review_status"].eq("normal").sum()) if "review_status" in result else 0)
+    review.metric("Review", int(result["review_status"].eq("review").sum()) if "review_status" in result else 0)
+    priority.metric("Priority", int(result["review_status"].eq("priority").sum()) if "review_status" in result else 0)
+
     st.subheader("Feature Table")
     st.dataframe(result, use_container_width=True)
 
     if {"device", "shot"}.issubset(result.columns):
-        st.subheader("Shot Count by Device")
-        chart_data = result.groupby(["device", "shot"], dropna=False).size().reset_index(name="count")
-        fig = px.bar(chart_data, x="shot", y="count", color="device", barmode="group")
-        st.plotly_chart(fig, use_container_width=True)
+        left, right = st.columns(2)
+        with left:
+            st.subheader("Shot Count by Device")
+            chart_data = result.groupby(["device", "shot"], dropna=False).size().reset_index(name="count")
+            fig = px.bar(chart_data, x="shot", y="count", color="device", barmode="group")
+            st.plotly_chart(fig, use_container_width=True)
+        with right:
+            st.subheader("Review Status")
+            if "review_status" in result.columns:
+                status_data = result.groupby(["device", "review_status"], dropna=False).size().reset_index(name="count")
+                fig = px.bar(status_data, x="device", y="count", color="review_status", barmode="stack")
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.info("review_status column is not available yet.")
 
     st.subheader("AI Explanation Placeholder")
     st.info(
@@ -42,4 +58,3 @@ if "result" in st.session_state:
     )
 else:
     st.info("데이터 경로를 입력하고 분석 실행을 누르세요.")
-

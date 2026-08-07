@@ -18,20 +18,31 @@ def _interp(x: np.ndarray, y: np.ndarray, value: float) -> float:
     return float(np.interp(value, x_valid[order], y_valid[order]))
 
 
+def _voltage_at_current(v: np.ndarray, i: np.ndarray, threshold: float) -> float:
+    mask = np.isfinite(v) & np.isfinite(i) & (i >= threshold)
+    return float(np.nanmin(v[mask])) if mask.any() else float("nan")
+
+
 def diode_features(m: Measurement) -> dict[str, float | str | None]:
     df = m.table
     v = df["AnodeV"].to_numpy(float)
     i = df["AnodeI"].to_numpy(float)
     result = {
+        "i_at_0v_a": _interp(v, i, 0.0),
+        "i_at_0_7v_a": _interp(v, i, 0.7),
         "i_at_1v_a": _interp(v, i, 1.0),
         "i_at_2v_a": _interp(v, i, 2.0),
         "i_max_a": float(np.nanmax(i)),
         "i_min_a": float(np.nanmin(i)),
+        "v_at_10na_v": _voltage_at_current(v, i, 1e-8),
+        "v_at_100na_v": _voltage_at_current(v, i, 1e-7),
+        "v_at_1ua_v": _voltage_at_current(v, i, 1e-6),
     }
     if "IFIT" in df.columns:
         fit = df["IFIT"].to_numpy(float)
         mask = np.isfinite(i) & np.isfinite(fit)
         result["ifit_mae_a"] = float(np.nanmean(np.abs(i[mask] - fit[mask]))) if mask.any() else float("nan")
+        result["ifit_max_abs_error_a"] = float(np.nanmax(np.abs(i[mask] - fit[mask]))) if mask.any() else float("nan")
     return result
 
 
@@ -48,7 +59,12 @@ def resistor_features(m: Measurement) -> dict[str, float | str | None]:
     r2 = 1 - np.sum((i[mask] - pred) ** 2) / denom if denom else float("nan")
     return {
         "resistance_ohm": float(1 / slope),
+        "conductance_s": float(slope),
+        "fit_intercept_a": float(intercept),
         "iv_linearity_r2": float(r2),
+        "fit_points": int(mask.sum()),
+        "i_at_3v_a": _interp(v, i, 3.0),
+        "i_at_minus_3v_a": _interp(v, i, -3.0),
         "compliance_hits": int(np.sum(np.abs(i) > 0.099)),
     }
 
@@ -62,6 +78,9 @@ def capacitor_features(m: Measurement) -> dict[str, float | str | None]:
         "c_at_0v_f": _interp(v[valid], c[valid], 0.0) if valid.any() else float("nan"),
         "c_max_f": float(np.nanmax(c[valid])) if valid.any() else float("nan"),
         "c_min_f": float(np.nanmin(c[valid])) if valid.any() else float("nan"),
+        "c_range_f": float(np.nanmax(c[valid]) - np.nanmin(c[valid])) if valid.any() else float("nan"),
+        "c_abs_max_raw_f": float(np.nanmax(np.abs(c[np.isfinite(c)]))) if np.isfinite(c).any() else float("nan"),
+        "g_or_r_median": float(np.nanmedian(df["G_or_R"].to_numpy(float))) if "G_or_R" in df else float("nan"),
         "invalid_c_points": int(np.sum(np.isfinite(c) & ~valid)),
     }
 
@@ -70,9 +89,15 @@ def nmos_features(m: Measurement) -> dict[str, float | str | None]:
     df = m.table
     drain_i = df["DrainI"].to_numpy(float)
     gate_i = df["GateI"].to_numpy(float)
+    gate_v = df["GateV"].to_numpy(float)
+    drain_v = df["DrainV"].to_numpy(float) if "DrainV" in df else np.array([float("nan")])
     return {
+        "drain_v_mean_v": float(np.nanmean(drain_v)),
+        "gate_v_min_v": float(np.nanmin(gate_v)),
+        "gate_v_max_v": float(np.nanmax(gate_v)),
         "drain_i_mean_a": float(np.nanmean(drain_i)),
         "drain_i_span_a": float(np.nanmax(drain_i) - np.nanmin(drain_i)),
+        "drain_i_at_gate_0v_a": _interp(gate_v, drain_i, 0.0),
         "gate_leak_abs_max_a": float(np.nanmax(np.abs(gate_i))),
         "compliance_suspect": bool(np.nanmin(drain_i) > 0.095),
     }
@@ -83,9 +108,18 @@ def extract_features(measurements: list[Measurement]) -> pd.DataFrame:
     for m in measurements:
         base: dict[str, object] = {
             "source": str(m.source_path),
+            "source_file": m.source_path.name,
+            "measurement_id": m.measurement_id,
+            "measurement_name": m.measurement_name,
             "device": m.device,
             "shot": m.shot,
             "rows": len(m.table),
+            "test_name": m.metadata.get("Test Name"),
+            "site_coordinate": m.metadata.get("Site Coordinate"),
+            "last_executed": m.metadata.get("Last Executed"),
+            "sweep_mode": m.metadata.get("Mode"),
+            "current_range": m.metadata.get("Current Range"),
+            "compliance": m.metadata.get("Compliance"),
         }
         try:
             if m.device == "diode" and {"AnodeI", "AnodeV"}.issubset(m.table.columns):
@@ -102,4 +136,3 @@ def extract_features(measurements: list[Measurement]) -> pd.DataFrame:
             base["parse_warning"] = repr(exc)
         rows.append(base)
     return pd.DataFrame(rows)
-

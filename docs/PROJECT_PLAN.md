@@ -18,17 +18,20 @@ init wafer ai analyst project
 - CSV parser 구현
 - 측정값과 metadata 분리
 - shot/device 자동 추출
+- metadata export 옵션 추가
 
 ## Day 3
 
 - Excel parser 구현
 - `7-2-2_Diode.xlsx` multi-sheet parsing
 - diode fitting curve 컬럼 정리
+- normalized curve table export 추가
 
 ## Day 4
 
 - 소자별 feature extraction 구현
 - diode/resistor/capacitor/NMOS 대표값 계산
+- anomaly score와 review status 추가
 
 ## Day 5
 
@@ -61,4 +64,3 @@ init wafer ai analyst project
 - README 고도화
 - 데모 시나리오 정리
 - 발표/면접 답변 정리
-
