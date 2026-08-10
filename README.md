@@ -33,7 +33,7 @@ Raw measurement files
 -> Electrical feature extraction
 -> Anomaly rule check
 -> Process issue candidate reasoning
--> AI explanation-ready report
+-> AI explanation generation
 -> Dashboard visualization
 ```
 
@@ -154,9 +154,12 @@ CSV file
 | Anomaly Flag | Trigger Example | Meaning |
 |---|---|---|
 | `measurement_error_suspect` | capacitor 값이 비정상적으로 큼 | 장비 오류값, probe contact 문제, 저장 오류 가능성 |
+| `raw_capacitance_outlier` | raw capacitor 값이 물리 범위를 벗어남 | CV range 오류, open contact, parsing artifact 가능성 |
 | `compliance_limit_suspect` | NMOS drain current가 제한값 근처에 고정 | 장비 compliance limit 또는 short 가능성 |
 | `current_saturation_suspect` | resistor 전류가 특정 값 이상에서 포화 | 접촉 저항 변화 또는 측정 조건 영향 가능성 |
 | `curve_fit_mismatch` | diode 측정 curve와 fitting curve 차이가 큼 | 비이상적인 diode 동작 또는 접촉 불안정 가능성 |
+| `gate_leakage_suspect` | NMOS gate leakage가 큼 | gate oxide 또는 probe contact 이슈 가능성 |
+| `resistor_linearity_drop` | resistor I-V 선형성이 낮음 | contact resistance, self-heating, compliance 영향 가능성 |
 
 ### Process Issue Reasoning
 
@@ -206,6 +209,7 @@ wafer-ai-analyst/
       features.py
       rules.py
       process_reasoning.py
+      explanations.py
       cli.py
 ```
 
@@ -225,7 +229,10 @@ pip install -r requirements.txt
 ```bash
 python -m src.wafer_ai_analyst.cli \
   --input data/raw \
-  --output data/processed/features.csv
+  --output data/processed/features.csv \
+  --metadata-output data/processed/metadata.csv \
+  --curves-output data/processed/curves.csv \
+  --explanations-output data/processed/explanations.csv
 ```
 
 Dashboard를 실행합니다.
@@ -259,8 +266,10 @@ streamlit run app.py
 - [x] Day 3 curve normalization export
 - [x] Day 4 feature engineering expansion
 - [x] Review status and anomaly score baseline
+- [x] Day 5 anomaly rule expansion
+- [x] Day 6 process issue candidate mapping
+- [x] Day 7 explanation agent module
 - [ ] Dashboard refinement
-- [ ] AI explanation prompt module
 - [ ] Automated report generation
 
 ## Engineering Notes
@@ -281,5 +290,8 @@ streamlit run app.py
 - [`docs/DAY2_PARSER_METADATA.md`](docs/DAY2_PARSER_METADATA.md)
 - [`docs/DAY3_CURVE_NORMALIZATION.md`](docs/DAY3_CURVE_NORMALIZATION.md)
 - [`docs/DAY4_FEATURE_ENGINEERING.md`](docs/DAY4_FEATURE_ENGINEERING.md)
+- [`docs/DAY5_ANOMALY_RULES.md`](docs/DAY5_ANOMALY_RULES.md)
+- [`docs/DAY6_PROCESS_REASONING.md`](docs/DAY6_PROCESS_REASONING.md)
+- [`docs/DAY7_EXPLANATION_AGENT.md`](docs/DAY7_EXPLANATION_AGENT.md)
 - [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md)
 - [`docs/GITHUB_SETUP.md`](docs/GITHUB_SETUP.md)

@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+from src.wafer_ai_analyst.explanations import add_explanations
 from src.wafer_ai_analyst.features import extract_features
 from src.wafer_ai_analyst.parsers import load_measurements
 from src.wafer_ai_analyst.process_reasoning import infer_process_candidates
@@ -22,6 +23,7 @@ if st.button("분석 실행"):
     features = extract_features(measurements)
     result = apply_anomaly_rules(features)
     result["process_issue_candidates"] = result["anomaly_flags"].map(infer_process_candidates)
+    result = add_explanations(result)
     st.session_state["result"] = result
 
 if "result" in st.session_state:
@@ -51,10 +53,21 @@ if "result" in st.session_state:
             else:
                 st.info("review_status column is not available yet.")
 
-    st.subheader("AI Explanation Placeholder")
-    st.info(
-        "다음 단계에서 LLM API를 연결하면 anomaly_flags와 process_issue_candidates를 바탕으로 "
-        "비전공자용/엔지니어용 설명을 자동 생성합니다."
-    )
+    if {"beginner_explanation", "engineer_explanation", "llm_prompt"}.issubset(result.columns):
+        st.subheader("AI Explanation")
+        label_source = (
+            result["measurement_id"]
+            if "measurement_id" in result.columns
+            else result.index.to_series().astype(str)
+        )
+        selected_label = st.selectbox("Measurement", label_source.tolist())
+        selected = result[label_source.eq(selected_label)].iloc[0]
+        beginner_tab, engineer_tab, prompt_tab = st.tabs(["Beginner", "Engineer", "LLM Prompt"])
+        with beginner_tab:
+            st.write(selected["beginner_explanation"])
+        with engineer_tab:
+            st.write(selected["engineer_explanation"])
+        with prompt_tab:
+            st.code(selected["llm_prompt"], language="text")
 else:
     st.info("데이터 경로를 입력하고 분석 실행을 누르세요.")

@@ -37,16 +37,19 @@ init wafer ai analyst project
 
 - rule-based anomaly detection 구현
 - measurement error, leakage, compliance, resistance variation rule 추가
+- anomaly score 기준으로 normal/review/priority 분류
 
 ## Day 6
 
 - 공정 이슈 후보 mapping 구현
 - contact issue, oxide defect, short, CD variation 후보 연결
+- anomaly flag별 next review direction 정리
 
 ## Day 7
 
 - LLM explanation prompt 설계
 - 비전공자용/엔지니어용 설명 생성
+- CLI와 dashboard에 explanation output 연결
 
 ## Day 8
 

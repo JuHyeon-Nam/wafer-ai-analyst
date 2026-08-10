@@ -7,6 +7,11 @@ ISSUE_MAP = {
         "measurement range error",
         "data artifact",
     ],
+    "raw_capacitance_outlier": [
+        "measurement range error",
+        "open/unstable probe contact",
+        "instrument parsing artifact",
+    ],
     "compliance_limit_suspect": [
         "measurement condition issue",
         "short suspect",
@@ -21,6 +26,16 @@ ISSUE_MAP = {
         "junction characteristic variation",
         "contact instability",
         "non-ideal diode behavior",
+    ],
+    "leakage_current_suspect": [
+        "junction leakage path",
+        "surface contamination",
+        "oxide/interface defect",
+    ],
+    "gate_leakage_suspect": [
+        "gate oxide weakness",
+        "surface leakage",
+        "probe contact instability",
     ],
     "diode_current_variation": [
         "junction variation",
@@ -37,6 +52,16 @@ ISSUE_MAP = {
         "thin film thickness variation",
         "line width variation",
         "contact resistance variation",
+    ],
+    "resistor_linearity_drop": [
+        "contact resistance variation",
+        "self-heating effect",
+        "instrument compliance",
+    ],
+    "nmos_current_span_suspect": [
+        "threshold voltage shift",
+        "channel process variation",
+        "local short/leakage path",
     ],
 }
 
