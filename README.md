@@ -1,14 +1,14 @@
 <h1 align="center">Wafer AI Analyst</h1>
 
 <p align="center">
-  <b>AI-assisted semiconductor wafer electrical test analysis system</b><br/>
-  Shot-level quality review · Electrical feature extraction · Process issue reasoning
+  <b>AI-assisted wafer electrical test analysis workflow</b><br/>
+  Raw measurement parsing · Shot-level anomaly review · Process issue candidate reasoning
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Project-10_Day_Sprint-2E74B5?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Domain-Semiconductor-0B2545?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/AI-LLM_Agent-6F42C1?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Status-Active_Development-2E74B5?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Target-2026.08.20-6F42C1?style=for-the-badge" />
 </p>
 
 <p align="center">
@@ -22,20 +22,25 @@
 
 ## Overview
 
-**Wafer AI Analyst**는 반도체 웨이퍼 전기 측정 데이터를 자동으로 정리하고, 소자별 IV/CV curve에서 핵심 feature를 추출한 뒤, shot 단위 이상 징후와 가능한 공정 이슈 후보를 제시하는 분석 시스템입니다.
+**Wafer AI Analyst**는 반도체 웨이퍼 전기 측정 데이터를 자동으로 정리하고, diode/resistor/capacitor/NMOS 소자별 electrical feature를 추출한 뒤, shot 단위 이상 징후와 가능한 공정/측정 이슈 후보를 제시하는 분석 시스템입니다.
 
-측정 장비에서 나온 raw CSV/Excel 파일은 측정값, 장비 조건, shot 정보가 섞여 있어 사람이 바로 비교하기 어렵습니다. 이 프로젝트는 그 과정을 자동화해 엔지니어가 shot별 품질 상태를 빠르게 검토할 수 있도록 설계했습니다.
+측정 장비에서 export된 CSV/Excel 파일에는 실제 측정값, 장비 조건, sheet 정보, shot 정보가 섞여 있습니다. 이 프로젝트는 raw data를 분석 가능한 table로 바꾸고, 이상 후보를 `normal`, `review`, `priority`로 분류한 뒤, 결과를 dashboard와 explanation agent에서 확인할 수 있게 구성했습니다.
 
 ```text
-Raw measurement files
--> Data parsing
--> Device/shot classification
--> Electrical feature extraction
--> Anomaly rule check
--> Process issue candidate reasoning
--> AI explanation generation
--> Dashboard visualization
+Raw CSV / Excel
+-> Parser
+-> Feature table
+-> Rule-based anomaly detection
+-> Process issue candidate mapping
+-> Explanation agent
+-> Streamlit dashboard
 ```
+
+## Dashboard Preview
+
+![Dashboard summary](docs/assets/dashboard_summary.png)
+
+![Feature table preview](docs/assets/feature_table_preview.png)
 
 ## Team
 
@@ -47,9 +52,9 @@ Raw measurement files
 ![AI](https://img.shields.io/badge/AI-Agent_Workflow-6F42C1?style=flat-square)
 ![Software](https://img.shields.io/badge/Software-Pipeline_Design-3776AB?style=flat-square)
 
-- Wafer electrical test data 분석 구조 설계
-- Python 기반 parser, feature extraction, anomaly rule workflow 구성
-- LLM Agent 설명 생성 구조와 GitHub 개발 흐름 관리
+- Python 기반 wafer data analysis pipeline 설계
+- CSV/Excel parser, feature extraction, anomaly workflow 연결
+- explanation agent 구조, dashboard 흐름, GitHub 개발 이력 관리
 
 ### 임유경
 
@@ -58,9 +63,9 @@ Raw measurement files
 ![Semiconductor](https://img.shields.io/badge/Semiconductor-Process_Flow-0B2545?style=flat-square)
 ![AI](https://img.shields.io/badge/AI-Result_Interpretation-6F42C1?style=flat-square)
 
-- Wafer shot 구조와 측정 공정 흐름 정리
-- 공정/장비 관점의 이상 원인 후보 정의
-- AI 설명 결과가 비전공자도 이해 가능한지 검토
+- wafer shot 구조와 측정 공정 흐름 정리
+- probe contact, measurement range, compliance 등 공정/장비 이슈 후보 정리
+- 비전공자도 이해 가능한 분석 설명 검토
 
 ### 임채진
 
@@ -69,9 +74,9 @@ Raw measurement files
 ![Semiconductor](https://img.shields.io/badge/Semiconductor-Test_Data-0B2545?style=flat-square)
 ![AI](https://img.shields.io/badge/AI-Dashboard_Report-6F42C1?style=flat-square)
 
-- Raw measurement data 처리 흐름 정리
-- Dashboard 화면 구성과 분석 결과 시각화 설계
-- AI report에 들어갈 shot별 요약 항목 정리
+- 분석 결과 table과 dashboard view 구성
+- shot/device별 review status 시각화 설계
+- measurement별 explanation 결과 표시 흐름 정리
 
 ### 최규상
 
@@ -80,138 +85,105 @@ Raw measurement files
 ![Semiconductor](https://img.shields.io/badge/Semiconductor-Device_Feature-0B2545?style=flat-square)
 ![AI](https://img.shields.io/badge/AI-Anomaly_Rule-6F42C1?style=flat-square)
 
-- Diode, NMOS, resistor, capacitor의 전기적 feature 정의
-- IV/CV curve 기반 이상 징후 기준 정리
-- AI Agent가 해석할 anomaly flag와 공정 이슈 후보 연결
-
-## Problem Definition
-
-반도체 제조와 테스트 과정에서는 wafer, shot, device 단위로 많은 전기 측정 데이터가 생성됩니다. 엔지니어는 다음 문제를 자주 마주합니다.
-
-- 측정 파일이 많아 수작업 확인 시간이 오래 걸림
-- CSV/Excel 안에 측정값과 장비 조건이 섞여 있음
-- 같은 소자라도 shot 위치에 따라 전기적 특성이 달라짐
-- 이상값이 실제 공정 문제인지, 측정 오류인지 빠르게 구분해야 함
-- 분석 결과를 팀원이 이해할 수 있는 형태로 설명해야 함
-
-Wafer AI Analyst는 전기 측정 데이터를 자동 정제하고, shot 단위 품질 상태를 빠르게 검토하는 분석 workflow를 제공합니다.
-
-## System Architecture
-
-```mermaid
-flowchart LR
-    A["Raw CSV / Excel<br/>Clarius measurement data"] --> B["Parser<br/>measurement block + metadata"]
-    B --> C["Classifier<br/>device / shot inference"]
-    C --> D["Feature Extractor<br/>IV/CV metrics"]
-    D --> E["Anomaly Rules<br/>quality flags"]
-    E --> F["Process Reasoning<br/>issue candidates"]
-    F --> G["AI Explanation Layer<br/>engineer-readable summary"]
-    G --> H["Streamlit Dashboard<br/>interactive review"]
-```
+- diode, resistor, capacitor, NMOS electrical feature 정의
+- IV/CV curve 기반 anomaly rule 기준 정리
+- 전기적 이상 징후와 공정 이슈 후보 연결 검토
 
 ## Dataset
 
-분석 대상은 wafer shot 단위 전기 측정 데이터입니다.
+분석 대상은 wafer shot 단위 전기 측정 데이터입니다. Raw data는 실험 데이터 보호를 위해 GitHub에 포함하지 않습니다.
 
 | Device | Measurement | Main Columns | Extracted Features |
 |---|---|---|---|
-| Diode | I-V curve | `AnodeI`, `AnodeV`, `IFIT` | `I@1V`, `I@2V`, max current, fitting error |
-| Resistor | I-V curve | `AI`, `AV` | resistance, linearity, current saturation count |
-| Capacitor | C-V curve | `C`, `V`, `G_or_R` | `C@0V`, max/min capacitance, invalid point count |
+| Diode | I-V curve | `AnodeI`, `AnodeV`, `IFIT` | `I@0V`, `I@1V`, `I@2V`, fitting error, leakage suspect |
+| Resistor | I-V curve | `AI`, `AV` | resistance, conductance, I-V linearity, compliance hit count |
+| Capacitor | C-V curve | `C`, `V`, `G_or_R` | `C@0V`, capacitance range, invalid point count, raw outlier |
 | NMOS | Id-Vg curve | `DrainI`, `DrainV`, `GateI`, `GateV` | drain current span, gate leakage, compliance suspect |
 
-Raw data는 실험 데이터 보호를 위해 GitHub에 포함하지 않습니다. 로컬 환경에서는 `data/raw/` 폴더에 측정 파일을 넣고 분석합니다.
+## Current Implementation
 
-## Core Features
-
-### Raw Data Parsing
-
-Clarius 계측 장비에서 export된 CSV 파일은 위쪽에 실제 측정값이 있고, 아래쪽에 측정 조건 metadata가 붙어 있습니다. Parser는 이 둘을 분리합니다.
-
-```text
-CSV file
--> measurement table
--> measurement metadata
--> device name
--> shot label
-```
-
-### Feature Extraction
-
-소자별 품질 판단에 필요한 feature를 계산합니다.
-
-| Device | Feature Meaning |
+| Layer | Implemented |
 |---|---|
-| Diode | 같은 전압에서 전류가 얼마나 흐르는지, fitting curve와 얼마나 다른지 확인 |
-| Resistor | I-V curve가 직선에 가까운지, 계산된 저항값이 shot별로 다른지 확인 |
-| Capacitor | capacitance 값이 물리적으로 정상 범위인지, 이상 측정점이 있는지 확인 |
-| NMOS | drain current가 장비 전류 제한에 걸렸는지, gate leakage가 큰지 확인 |
+| Data ingestion | Clarius-style CSV parser, multi-sheet diode Excel parser |
+| Metadata handling | measurement table과 metadata table 분리, `measurement_id` 생성 |
+| Curve normalization | 여러 파일의 IV/CV curve를 하나의 long-format curve table로 정리 |
+| Feature extraction | 소자별 electrical feature 계산 |
+| Anomaly detection | rule-based flag, `anomaly_score`, `review_status` 생성 |
+| Process reasoning | anomaly flag를 가능한 공정/측정 이슈 후보와 연결 |
+| Explanation agent | 비전공자용 설명, 엔지니어용 설명, LLM prompt 생성 |
+| Dashboard | Streamlit 기반 feature table, status chart, explanation view |
 
-### Anomaly Detection
+## Anomaly Logic
 
-초기 버전은 소량의 실제 측정 데이터에서도 안정적으로 동작하도록 rule-based 방식으로 이상 후보를 탐지합니다.
+초기 분석은 데이터 수와 label이 제한적인 상황을 고려해 rule-based baseline으로 구현했습니다. 이는 현업에서도 데이터 구조를 이해하고 기준선을 잡을 때 자주 사용하는 접근입니다.
 
-| Anomaly Flag | Trigger Example | Meaning |
+| Anomaly Flag | Trigger Example | Review Meaning |
 |---|---|---|
-| `measurement_error_suspect` | capacitor 값이 비정상적으로 큼 | 장비 오류값, probe contact 문제, 저장 오류 가능성 |
-| `raw_capacitance_outlier` | raw capacitor 값이 물리 범위를 벗어남 | CV range 오류, open contact, parsing artifact 가능성 |
-| `compliance_limit_suspect` | NMOS drain current가 제한값 근처에 고정 | 장비 compliance limit 또는 short 가능성 |
-| `current_saturation_suspect` | resistor 전류가 특정 값 이상에서 포화 | 접촉 저항 변화 또는 측정 조건 영향 가능성 |
-| `curve_fit_mismatch` | diode 측정 curve와 fitting curve 차이가 큼 | 비이상적인 diode 동작 또는 접촉 불안정 가능성 |
-| `gate_leakage_suspect` | NMOS gate leakage가 큼 | gate oxide 또는 probe contact 이슈 가능성 |
+| `measurement_error_suspect` | capacitor invalid point 존재 | 측정 오류, probe contact, 저장 artifact 가능성 |
+| `raw_capacitance_outlier` | raw capacitance가 물리 범위를 벗어남 | CV range 오류, open contact, parsing artifact 가능성 |
+| `compliance_limit_suspect` | NMOS drain current가 장비 제한 근처에 고정 | compliance limit 또는 short path 가능성 |
+| `current_saturation_suspect` | resistor current가 high-current 구간에서 포화 | contact resistance 또는 측정 조건 영향 가능성 |
+| `curve_fit_mismatch` | diode 측정 curve와 fitting curve 차이가 큼 | 비이상적 diode 동작 또는 contact 불안정 가능성 |
+| `leakage_current_suspect` | diode low-bias current가 큼 | junction leakage, surface contamination 가능성 |
+| `gate_leakage_suspect` | NMOS gate leakage가 큼 | gate oxide, surface leakage, probe contact 가능성 |
 | `resistor_linearity_drop` | resistor I-V 선형성이 낮음 | contact resistance, self-heating, compliance 영향 가능성 |
 
-### Process Issue Reasoning
+## Technology Choices
 
-전기적 이상 징후를 가능한 공정/측정 이슈 후보와 연결합니다.
-
-| Electrical Pattern | Candidate Issue | Interpretation |
+| Stack | Why It Was Used | Troubleshooting Point |
 |---|---|---|
-| Diode current differs by shot | Junction variation, contact issue, CD variation | 같은 diode 구조가 shot 위치에 따라 다르게 동작 |
-| Diode curve differs from fitting curve | Non-ideal diode behavior, contact instability | 이상적인 diode 모델과 실제 측정값 사이의 차이 |
-| Resistor linearity decreases | Contact resistance, current saturation | 저항 소자가 정상적인 직선 응답을 보이지 않음 |
-| Capacitor has unrealistic value | Measurement error, probe issue, data artifact | 물리값보다 장비/저장 오류 가능성 |
-| NMOS current sticks near limit | Compliance limit, short suspect | 장비 전류 제한으로 실제 curve가 왜곡될 가능성 |
+| Python | 데이터 parsing, feature 계산, dashboard, CLI를 한 언어로 연결하기 위해 사용 | 분석 모듈을 `parser -> feature -> rule -> explanation`으로 분리해 유지보수성 확보 |
+| pandas | CSV/Excel처럼 표 형태인 측정 데이터를 정리하기 위해 사용 | measurement, metadata, curve, feature table을 분리해 column mismatch 문제 해결 |
+| NumPy | IV/CV curve에서 interpolation, fitting, max/min/span 계산을 위해 사용 | NaN과 비정상 capacitor 값을 필터링해 계산 안정성 확보 |
+| openpyxl | multi-sheet Excel diode file을 읽기 위해 사용 | `Settings` sheet는 측정값이 아니라 metadata로 따로 처리 |
+| Rule-based logic | label 부족 상황에서 안정적인 baseline을 만들기 위해 사용 | 단순 threshold와 shot group median 비교를 함께 사용해 오탐을 줄임 |
+| Streamlit | Python 코드만으로 빠르게 시연 가능한 dashboard를 만들기 위해 사용 | CLI 결과만으로는 흐름이 안 보여 status chart와 explanation view를 추가 |
+| Plotly | shot/device별 분석 결과를 interactive chart로 보여주기 위해 사용 | 표 중심 결과를 chart와 함께 보여줘 review 우선순위를 쉽게 파악하게 구성 |
+| Explanation agent | 숫자와 flag를 사람이 이해할 수 있는 문장으로 바꾸기 위해 사용 | root cause를 단정하지 않고 candidate issue로 표현하도록 설계 |
 
-이 시스템은 공정 원인을 단정하지 않습니다. 전기적 증거를 바탕으로 가능한 원인 후보를 좁히고, 추가 확인 방향을 제시하는 engineering review tool입니다.
+## Planned ML Expansion
 
-## Tech Stack
-
-| Category | Stack | Usage |
-|---|---|---|
-| Language | Python | 분석 파이프라인과 dashboard 구현 |
-| Data Processing | pandas, numpy | CSV/Excel 정제, 수치 계산, feature extraction |
-| Excel Handling | openpyxl | multi-sheet diode Excel 파일 처리 |
-| Visualization | plotly | IV/CV curve와 shot별 feature 시각화 |
-| Dashboard | Streamlit | 사용자 입력과 분석 결과 화면 구성 |
-| AI Layer | LLM prompt workflow | 분석 결과를 자연어 설명으로 변환 |
-| Version Control | Git, GitHub | 팀 개발 이력 관리 |
-
-## Project Structure
+현재 시스템은 rule-based anomaly detection과 explanation agent가 중심입니다. 이후 단계에서는 실제 데이터 형식과 curve 특성을 참고해 synthetic defect scenario dataset을 만들고, baseline ML classifier를 추가합니다.
 
 ```text
-wafer-ai-analyst/
-  app.py
-  requirements.txt
-  README.md
-  data/
-    raw/
-    processed/
-  docs/
-    DAY1_DATA_AUDIT.md
-    GITHUB_SETUP.md
-    PROJECT_PLAN.md
-  reports/
-    figures/
-  src/
-    wafer_ai_analyst/
-      parsers.py
-      features.py
-      rules.py
-      process_reasoning.py
-      explanations.py
-      cli.py
+Real wafer feature table
+-> synthetic defect scenario generation
+-> train/test split
+-> RandomForestClassifier
+-> accuracy / F1-score / confusion matrix
+-> feature importance review
+-> dashboard comparison with rule-based result
 ```
+
+Planned synthetic labels:
+
+| Label | Pattern |
+|---|---|
+| `normal` | 정상 범위 feature |
+| `diode_leakage` | low-bias diode current 증가 |
+| `diode_contact_issue` | fitting error와 curve fluctuation 증가 |
+| `resistance_shift` | resistor slope 변화 |
+| `resistor_nonlinearity` | I-V linearity 저하 |
+| `capacitance_variation` | shot별 capacitance shift |
+| `capacitance_outlier` | CV raw value spike |
+| `nmos_gate_leakage` | gate leakage 증가 |
+| `nmos_compliance_limit` | drain current가 compliance 근처에서 제한 |
+
+## Roadmap to 2026-08-20
+
+| Date | Goal | Output |
+|---|---|---|
+| 2026-08-10 | README/project evidence 정리, dashboard preview asset 생성 | README refresh, dashboard/table preview images |
+| 2026-08-11 | Synthetic defect scenario 설계 | scenario schema, synthetic feature generator |
+| 2026-08-12 | Synthetic dataset 생성 및 검증 | labeled synthetic feature dataset |
+| 2026-08-13 | RandomForest baseline 학습 | model training script, train/test split |
+| 2026-08-14 | 파라미터 튜닝 및 평가 | accuracy, F1-score, confusion matrix |
+| 2026-08-15 | Feature importance 분석 | device/defect별 중요 feature 정리 |
+| 2026-08-16 | Dashboard ML prediction view 추가 | rule result와 ML prediction 비교 |
+| 2026-08-17 | Curve viewer와 shot-level detail view 개선 | measurement detail review 화면 |
+| 2026-08-18 | HTML/Markdown report 자동 생성 | analysis report artifact |
+| 2026-08-19 | README, docs, demo scenario 정리 | final documentation pass |
+| 2026-08-20 | End-to-end 검증 및 최종 정리 | reproducible demo and release notes |
 
 ## Quick Start
 
@@ -241,48 +213,18 @@ Dashboard를 실행합니다.
 streamlit run app.py
 ```
 
-## 10-Day Sprint Plan
+README 이미지를 갱신할 때는 처리된 feature preview를 만든 뒤 asset generator를 실행합니다.
 
-| Day | Goal |
-|---|---|
-| Day 1 | Repository setup, README 정리, 데이터 구조 audit |
-| Day 2 | CSV parser 고도화, metadata 분리 안정화 |
-| Day 3 | Excel diode parser 고도화, shot별 curve 정리 |
-| Day 4 | 소자별 feature extraction 확장 |
-| Day 5 | anomaly rule 정리 및 threshold 조정 |
-| Day 6 | process issue candidate mapping 고도화 |
-| Day 7 | LLM explanation prompt module 구현 |
-| Day 8 | Streamlit dashboard UI 개선 |
-| Day 9 | 자동 분석 리포트 생성 |
-| Day 10 | demo 결과 정리 및 최종 문서화 |
+```bash
+python scripts/generate_readme_assets.py \
+  --input data/processed/features.csv
+```
 
-## Current Status
-
-- [x] GitHub repository setup
-- [x] Project directory structure
-- [x] Team README rewrite
-- [x] Day 1 dataset audit
-- [x] Day 2 parser metadata export
-- [x] Day 3 curve normalization export
-- [x] Day 4 feature engineering expansion
-- [x] Review status and anomaly score baseline
-- [x] Day 5 anomaly rule expansion
-- [x] Day 6 process issue candidate mapping
-- [x] Day 7 explanation agent module
-- [ ] Dashboard refinement
-- [ ] Automated report generation
-
-## Engineering Notes
+## Engineering Boundary
 
 현재 데이터만으로 실제 공정 불량 원인을 확정할 수는 없습니다. 실제 root cause analysis에는 공정 recipe, 온도/압력/시간 조건, 증착 두께, 식각 조건, 도핑 조건, SEM/광학 이미지, 반복 측정 데이터가 추가로 필요합니다.
 
-따라서 Wafer AI Analyst는 다음 목적에 초점을 둡니다.
-
-```text
-전기 측정 데이터에서 이상 징후를 찾고,
-가능한 공정/측정 이슈 후보를 좁히고,
-엔지니어가 다음 확인 방향을 빠르게 판단하도록 돕는다.
-```
+따라서 이 시스템은 전기 측정 데이터에서 이상 징후를 찾고, 가능한 공정/측정 이슈 후보를 좁혀 엔지니어가 다음 확인 방향을 빠르게 판단하도록 돕는 review workflow입니다.
 
 ## Documents
 
