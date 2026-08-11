@@ -112,6 +112,7 @@ Raw CSV / Excel
 | Process reasoning | anomaly flag를 가능한 공정/측정 이슈 후보와 연결 |
 | Explanation agent | 비전공자용 설명, 엔지니어용 설명, LLM prompt 생성 |
 | Dashboard | Streamlit 기반 feature table, status chart, explanation view |
+| Synthetic data | 실제 feature 분포를 참고한 defect scenario feature generator |
 
 ## Anomaly Logic
 
@@ -143,7 +144,7 @@ Raw CSV / Excel
 
 ## Planned ML Expansion
 
-현재 시스템은 rule-based anomaly detection과 explanation agent가 중심입니다. 이후 단계에서는 실제 데이터 형식과 curve 특성을 참고해 synthetic defect scenario dataset을 만들고, baseline ML classifier를 추가합니다.
+현재 시스템은 rule-based anomaly detection과 explanation agent가 중심입니다. 2026-08-11 기준으로 synthetic defect scenario generator를 추가했으며, 이후 단계에서는 이 labeled dataset을 이용해 baseline ML classifier를 학습합니다.
 
 ```text
 Real wafer feature table
@@ -220,6 +221,16 @@ python scripts/generate_readme_assets.py \
   --input data/processed/features.csv
 ```
 
+Synthetic defect scenario dataset을 생성합니다.
+
+```bash
+python scripts/generate_synthetic_dataset.py \
+  --input data/processed/features.csv \
+  --output data/processed/synthetic_features.csv \
+  --scenario-output data/processed/synthetic_scenarios.csv \
+  --samples-per-scenario 80
+```
+
 ## Engineering Boundary
 
 현재 데이터만으로 실제 공정 불량 원인을 확정할 수는 없습니다. 실제 root cause analysis에는 공정 recipe, 온도/압력/시간 조건, 증착 두께, 식각 조건, 도핑 조건, SEM/광학 이미지, 반복 측정 데이터가 추가로 필요합니다.
@@ -235,5 +246,6 @@ python scripts/generate_readme_assets.py \
 - [`docs/DAY5_ANOMALY_RULES.md`](docs/DAY5_ANOMALY_RULES.md)
 - [`docs/DAY6_PROCESS_REASONING.md`](docs/DAY6_PROCESS_REASONING.md)
 - [`docs/DAY7_EXPLANATION_AGENT.md`](docs/DAY7_EXPLANATION_AGENT.md)
+- [`docs/SYNTHETIC_DEFECT_SCENARIOS.md`](docs/SYNTHETIC_DEFECT_SCENARIOS.md)
 - [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md)
 - [`docs/GITHUB_SETUP.md`](docs/GITHUB_SETUP.md)

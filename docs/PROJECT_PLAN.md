@@ -17,6 +17,8 @@ Wafer AI Analyst는 wafer electrical test raw data를 자동 분석하고, shot 
 - Process issue candidate mapping
 - Beginner/engineer explanation generation
 - Streamlit dashboard
+- Synthetic defect scenario schema
+- Synthetic feature dataset generator
 
 ## Target Architecture
 
@@ -42,7 +44,7 @@ Synthetic defect scenario data
 | Date | Goal | Output |
 |---|---|---|
 | 2026-08-10 | README/project evidence 정리, dashboard preview asset 생성 | README refresh, graph/table preview images |
-| 2026-08-11 | Synthetic defect scenario 설계 | defect label schema, scenario rules |
+| 2026-08-11 | Synthetic defect scenario 설계 | defect label schema, scenario rules, generator script |
 | 2026-08-12 | Synthetic feature dataset 생성 | labeled synthetic dataset |
 | 2026-08-13 | RandomForest baseline 학습 | training script, saved model artifact |
 | 2026-08-14 | Hyperparameter tuning | tuned model, train/test evaluation |
