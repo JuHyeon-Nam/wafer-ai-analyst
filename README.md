@@ -113,6 +113,7 @@ Raw CSV / Excel
 | Explanation agent | 비전공자용 설명, 엔지니어용 설명, LLM prompt 생성 |
 | Dashboard | Streamlit 기반 feature table, status chart, explanation view |
 | Synthetic data | 실제 feature 분포를 참고한 defect scenario feature generator |
+| ML dataset prep | train/test split, feature column selection, validation report |
 
 ## Anomaly Logic
 
@@ -176,7 +177,7 @@ Planned synthetic labels:
 |---|---|---|
 | 2026-08-10 | README/project evidence 정리, dashboard preview asset 생성 | README refresh, dashboard/table preview images |
 | 2026-08-11 | Synthetic defect scenario 설계 | scenario schema, synthetic feature generator |
-| 2026-08-12 | Synthetic dataset 생성 및 검증 | labeled synthetic feature dataset |
+| 2026-08-12 | Synthetic dataset 생성 및 검증 | ML-ready dataset, train/test split, validation report |
 | 2026-08-13 | RandomForest baseline 학습 | model training script, train/test split |
 | 2026-08-14 | 파라미터 튜닝 및 평가 | accuracy, F1-score, confusion matrix |
 | 2026-08-15 | Feature importance 분석 | device/defect별 중요 feature 정리 |
@@ -231,6 +232,17 @@ python scripts/generate_synthetic_dataset.py \
   --samples-per-scenario 80
 ```
 
+ML 학습용 dataset을 준비합니다.
+
+```bash
+python scripts/prepare_ml_dataset.py \
+  --input data/processed/synthetic_features.csv \
+  --output data/processed/ml_dataset.csv \
+  --feature-columns-output data/processed/ml_feature_columns.txt \
+  --report-output docs/SYNTHETIC_ML_DATASET_VALIDATION.md \
+  --test-size 0.2
+```
+
 ## Engineering Boundary
 
 현재 데이터만으로 실제 공정 불량 원인을 확정할 수는 없습니다. 실제 root cause analysis에는 공정 recipe, 온도/압력/시간 조건, 증착 두께, 식각 조건, 도핑 조건, SEM/광학 이미지, 반복 측정 데이터가 추가로 필요합니다.
@@ -247,5 +259,7 @@ python scripts/generate_synthetic_dataset.py \
 - [`docs/DAY6_PROCESS_REASONING.md`](docs/DAY6_PROCESS_REASONING.md)
 - [`docs/DAY7_EXPLANATION_AGENT.md`](docs/DAY7_EXPLANATION_AGENT.md)
 - [`docs/SYNTHETIC_DEFECT_SCENARIOS.md`](docs/SYNTHETIC_DEFECT_SCENARIOS.md)
+- [`docs/ML_DATASET_PREPARATION.md`](docs/ML_DATASET_PREPARATION.md)
+- [`docs/SYNTHETIC_ML_DATASET_VALIDATION.md`](docs/SYNTHETIC_ML_DATASET_VALIDATION.md)
 - [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md)
 - [`docs/GITHUB_SETUP.md`](docs/GITHUB_SETUP.md)
