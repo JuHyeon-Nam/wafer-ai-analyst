@@ -17,8 +17,11 @@ reports/*.pdf
 reports/figures/*
 !reports/figures/.gitkeep
 
+# Model artifacts
+models/*
+!models/.gitkeep
+
 # OS/editor
 .DS_Store
 .idea/
 .vscode/
-

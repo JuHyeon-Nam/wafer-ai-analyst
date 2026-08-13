@@ -5,3 +5,5 @@ plotly>=5.22
 streamlit>=1.36
 python-dotenv>=1.0
 pillow>=10.0
+scikit-learn>=1.5
+joblib>=1.4

@@ -15,6 +15,7 @@
   <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
   <img src="https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas&logoColor=white" />
   <img src="https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white" />
+  <img src="https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white" />
   <img src="https://img.shields.io/badge/Plotly-3F4F75?style=flat-square&logo=plotly&logoColor=white" />
   <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" />
   <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" />
@@ -114,6 +115,7 @@ Raw CSV / Excel
 | Dashboard | Streamlit 기반 feature table, status chart, explanation view |
 | Synthetic data | 실제 feature 분포를 참고한 defect scenario feature generator |
 | ML dataset prep | train/test split, feature column selection, validation report |
+| ML baseline | RandomForest defect classifier training and evaluation |
 
 ## Anomaly Logic
 
@@ -142,10 +144,12 @@ Raw CSV / Excel
 | Streamlit | Python 코드만으로 빠르게 시연 가능한 dashboard를 만들기 위해 사용 | CLI 결과만으로는 흐름이 안 보여 status chart와 explanation view를 추가 |
 | Plotly | shot/device별 분석 결과를 interactive chart로 보여주기 위해 사용 | 표 중심 결과를 chart와 함께 보여줘 review 우선순위를 쉽게 파악하게 구성 |
 | Explanation agent | 숫자와 flag를 사람이 이해할 수 있는 문장으로 바꾸기 위해 사용 | root cause를 단정하지 않고 candidate issue로 표현하도록 설계 |
+| scikit-learn | feature table 기반 RandomForest baseline 학습에 사용 | label leakage를 막기 위해 ID, 설명문, rule 결과를 feature에서 제외 |
+| joblib | 학습된 model artifact 저장에 사용 | 모델 binary는 local output으로 관리하고 GitHub에는 재현 가능한 script와 report를 남김 |
 
 ## Planned ML Expansion
 
-현재 시스템은 rule-based anomaly detection과 explanation agent가 중심입니다. 2026-08-11 기준으로 synthetic defect scenario generator를 추가했으며, 이후 단계에서는 이 labeled dataset을 이용해 baseline ML classifier를 학습합니다.
+현재 시스템은 rule-based anomaly detection과 explanation agent를 유지하면서, synthetic defect scenario dataset 기반 RandomForest baseline classifier를 추가했습니다.
 
 ```text
 Real wafer feature table
@@ -156,6 +160,14 @@ Real wafer feature table
 -> feature importance review
 -> dashboard comparison with rule-based result
 ```
+
+Current baseline result:
+
+| Metric | Value |
+|---|---:|
+| Train accuracy | 0.9097 |
+| Test accuracy | 0.8819 |
+| Test macro F1-score | 0.8736 |
 
 Planned synthetic labels:
 
@@ -178,7 +190,7 @@ Planned synthetic labels:
 | 2026-08-10 | README/project evidence 정리, dashboard preview asset 생성 | README refresh, dashboard/table preview images |
 | 2026-08-11 | Synthetic defect scenario 설계 | scenario schema, synthetic feature generator |
 | 2026-08-12 | Synthetic dataset 생성 및 검증 | ML-ready dataset, train/test split, validation report |
-| 2026-08-13 | RandomForest baseline 학습 | model training script, train/test split |
+| 2026-08-13 | RandomForest baseline 학습 | training script, saved model artifact, baseline report |
 | 2026-08-14 | 파라미터 튜닝 및 평가 | accuracy, F1-score, confusion matrix |
 | 2026-08-15 | Feature importance 분석 | device/defect별 중요 feature 정리 |
 | 2026-08-16 | Dashboard ML prediction view 추가 | rule result와 ML prediction 비교 |
@@ -243,6 +255,18 @@ python scripts/prepare_ml_dataset.py \
   --test-size 0.2
 ```
 
+RandomForest baseline model을 학습합니다.
+
+```bash
+python scripts/train_random_forest.py \
+  --input data/processed/ml_dataset.csv \
+  --model-output models/random_forest_baseline.joblib \
+  --report-output docs/RANDOM_FOREST_BASELINE.md \
+  --predictions-output data/processed/rf_predictions.csv \
+  --importance-output data/processed/rf_feature_importance.csv \
+  --metrics-output data/processed/rf_metrics.json
+```
+
 ## Engineering Boundary
 
 현재 데이터만으로 실제 공정 불량 원인을 확정할 수는 없습니다. 실제 root cause analysis에는 공정 recipe, 온도/압력/시간 조건, 증착 두께, 식각 조건, 도핑 조건, SEM/광학 이미지, 반복 측정 데이터가 추가로 필요합니다.
@@ -261,5 +285,7 @@ python scripts/prepare_ml_dataset.py \
 - [`docs/SYNTHETIC_DEFECT_SCENARIOS.md`](docs/SYNTHETIC_DEFECT_SCENARIOS.md)
 - [`docs/ML_DATASET_PREPARATION.md`](docs/ML_DATASET_PREPARATION.md)
 - [`docs/SYNTHETIC_ML_DATASET_VALIDATION.md`](docs/SYNTHETIC_ML_DATASET_VALIDATION.md)
+- [`docs/RANDOM_FOREST_TRAINING.md`](docs/RANDOM_FOREST_TRAINING.md)
+- [`docs/RANDOM_FOREST_BASELINE.md`](docs/RANDOM_FOREST_BASELINE.md)
 - [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md)
 - [`docs/GITHUB_SETUP.md`](docs/GITHUB_SETUP.md)

@@ -21,6 +21,8 @@ Wafer AI Analyst는 wafer electrical test raw data를 자동 분석하고, shot 
 - Synthetic feature dataset generator
 - ML-ready dataset preparation
 - Stratified train/test split validation
+- RandomForest baseline training
+- Baseline classification report
 
 ## Target Architecture
 
@@ -48,7 +50,7 @@ Synthetic defect scenario data
 | 2026-08-10 | README/project evidence 정리, dashboard preview asset 생성 | README refresh, graph/table preview images |
 | 2026-08-11 | Synthetic defect scenario 설계 | defect label schema, scenario rules, generator script |
 | 2026-08-12 | Synthetic feature dataset 생성 | ML-ready dataset, feature columns, validation report |
-| 2026-08-13 | RandomForest baseline 학습 | training script, saved model artifact |
+| 2026-08-13 | RandomForest baseline 학습 | training script, saved model artifact, baseline report |
 | 2026-08-14 | Hyperparameter tuning | tuned model, train/test evaluation |
 | 2026-08-15 | Feature importance 분석 | important feature report |
 | 2026-08-16 | Dashboard ML prediction view 추가 | rule result와 ML prediction 비교 화면 |
