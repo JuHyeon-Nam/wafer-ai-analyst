@@ -116,6 +116,7 @@ Raw CSV / Excel
 | Synthetic data | 실제 feature 분포를 참고한 defect scenario feature generator |
 | ML dataset prep | train/test split, feature column selection, validation report |
 | ML baseline | RandomForest defect classifier training and evaluation |
+| ML tuning | 72개 parameter 조합 비교, tuned RandomForest model selection |
 
 ## Anomaly Logic
 
@@ -147,27 +148,38 @@ Raw CSV / Excel
 | scikit-learn | feature table 기반 RandomForest baseline 학습에 사용 | label leakage를 막기 위해 ID, 설명문, rule 결과를 feature에서 제외 |
 | joblib | 학습된 model artifact 저장에 사용 | 모델 binary는 local output으로 관리하고 GitHub에는 재현 가능한 script와 report를 남김 |
 
-## Planned ML Expansion
+## ML Model Expansion
 
-현재 시스템은 rule-based anomaly detection과 explanation agent를 유지하면서, synthetic defect scenario dataset 기반 RandomForest baseline classifier를 추가했습니다.
+현재 시스템은 rule-based anomaly detection과 explanation agent를 유지하면서, synthetic defect scenario dataset 기반 RandomForest classifier를 추가했습니다.
 
 ```text
 Real wafer feature table
 -> synthetic defect scenario generation
 -> train/test split
 -> RandomForestClassifier
--> accuracy / F1-score / confusion matrix
+-> hyperparameter tuning
+-> accuracy / macro F1-score / confusion matrix
 -> feature importance review
 -> dashboard comparison with rule-based result
 ```
 
-Current baseline result:
+Model evaluation:
 
-| Metric | Value |
+| Model | Train Accuracy | Test Accuracy | Test Macro F1 |
+|---|---:|---:|---:|
+| Baseline RandomForest | 0.9097 | 0.8819 | 0.8736 |
+| Tuned RandomForest | 0.9618 | 0.9028 | 0.8960 |
+
+Selected tuned model:
+
+| Parameter | Selected Value |
 |---|---:|
-| Train accuracy | 0.9097 |
-| Test accuracy | 0.8819 |
-| Test macro F1-score | 0.8736 |
+| `n_estimators` | `100` |
+| `max_depth` | `None` |
+| `min_samples_leaf` | `1` |
+| `class_weight` | `None` |
+
+튜닝 결과 test accuracy와 macro F1-score가 모두 개선되었습니다. 다만 `normal` class recall은 아직 낮아, 실제 공정 판단에서는 model prediction을 단정값이 아니라 review candidate로 사용하는 방향을 유지합니다.
 
 Planned synthetic labels:
 
@@ -191,7 +203,7 @@ Planned synthetic labels:
 | 2026-08-11 | Synthetic defect scenario 설계 | scenario schema, synthetic feature generator |
 | 2026-08-12 | Synthetic dataset 생성 및 검증 | ML-ready dataset, train/test split, validation report |
 | 2026-08-13 | RandomForest baseline 학습 | training script, saved model artifact, baseline report |
-| 2026-08-14 | 파라미터 튜닝 및 평가 | accuracy, F1-score, confusion matrix |
+| 2026-08-14 | 파라미터 튜닝 및 평가 | tuning result table, tuned model report |
 | 2026-08-15 | Feature importance 분석 | device/defect별 중요 feature 정리 |
 | 2026-08-16 | Dashboard ML prediction view 추가 | rule result와 ML prediction 비교 |
 | 2026-08-17 | Curve viewer와 shot-level detail view 개선 | measurement detail review 화면 |
@@ -267,6 +279,20 @@ python scripts/train_random_forest.py \
   --metrics-output data/processed/rf_metrics.json
 ```
 
+RandomForest parameter tuning을 실행합니다.
+
+```bash
+python scripts/tune_random_forest.py \
+  --input data/processed/ml_dataset.csv \
+  --results-output data/processed/rf_tuning_results.csv \
+  --report-output docs/RANDOM_FOREST_TUNING.md \
+  --best-model-output models/random_forest_tuned.joblib \
+  --best-report-output docs/RANDOM_FOREST_TUNED_MODEL.md \
+  --best-predictions-output data/processed/rf_tuned_predictions.csv \
+  --best-importance-output data/processed/rf_tuned_feature_importance.csv \
+  --metrics-output data/processed/rf_tuned_metrics.json
+```
+
 ## Engineering Boundary
 
 현재 데이터만으로 실제 공정 불량 원인을 확정할 수는 없습니다. 실제 root cause analysis에는 공정 recipe, 온도/압력/시간 조건, 증착 두께, 식각 조건, 도핑 조건, SEM/광학 이미지, 반복 측정 데이터가 추가로 필요합니다.
@@ -287,5 +313,7 @@ python scripts/train_random_forest.py \
 - [`docs/SYNTHETIC_ML_DATASET_VALIDATION.md`](docs/SYNTHETIC_ML_DATASET_VALIDATION.md)
 - [`docs/RANDOM_FOREST_TRAINING.md`](docs/RANDOM_FOREST_TRAINING.md)
 - [`docs/RANDOM_FOREST_BASELINE.md`](docs/RANDOM_FOREST_BASELINE.md)
+- [`docs/RANDOM_FOREST_TUNING.md`](docs/RANDOM_FOREST_TUNING.md)
+- [`docs/RANDOM_FOREST_TUNED_MODEL.md`](docs/RANDOM_FOREST_TUNED_MODEL.md)
 - [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md)
 - [`docs/GITHUB_SETUP.md`](docs/GITHUB_SETUP.md)

@@ -4,7 +4,7 @@
 
 Wafer AI Analyst는 wafer electrical test raw data를 자동 분석하고, shot 단위 이상 후보를 분류하며, 가능한 공정/측정 이슈 후보와 설명 결과를 제공하는 분석 workflow입니다.
 
-현재 구현된 rule-based baseline과 explanation agent를 유지하면서, 2026-08-20까지 synthetic defect scenario dataset과 RandomForest 기반 ML classifier를 추가합니다.
+현재 구현된 rule-based baseline과 explanation agent를 유지하면서, synthetic defect scenario dataset과 RandomForest 기반 ML classifier를 추가합니다.
 
 ## Current Baseline
 
@@ -23,6 +23,8 @@ Wafer AI Analyst는 wafer electrical test raw data를 자동 분석하고, shot 
 - Stratified train/test split validation
 - RandomForest baseline training
 - Baseline classification report
+- RandomForest hyperparameter tuning
+- Tuned model report and tuning result table
 
 ## Target Architecture
 
@@ -38,6 +40,7 @@ Real wafer measurement data
 Synthetic defect scenario data
 -> feature dataset
 -> RandomForest model training
+-> hyperparameter tuning
 -> defect type prediction
 -> model evaluation
 -> dashboard comparison
@@ -51,7 +54,7 @@ Synthetic defect scenario data
 | 2026-08-11 | Synthetic defect scenario 설계 | defect label schema, scenario rules, generator script |
 | 2026-08-12 | Synthetic feature dataset 생성 | ML-ready dataset, feature columns, validation report |
 | 2026-08-13 | RandomForest baseline 학습 | training script, saved model artifact, baseline report |
-| 2026-08-14 | Hyperparameter tuning | tuned model, train/test evaluation |
+| 2026-08-14 | Hyperparameter tuning | tuning result table, tuned model report |
 | 2026-08-15 | Feature importance 분석 | important feature report |
 | 2026-08-16 | Dashboard ML prediction view 추가 | rule result와 ML prediction 비교 화면 |
 | 2026-08-17 | Curve viewer/detail review 개선 | device/shot별 상세 분석 화면 |
@@ -90,6 +93,17 @@ Synthetic defect scenario data
 - Feature importance
 
 Accuracy만 보면 정상 class가 많은 경우 성능이 과대평가될 수 있으므로, defect class별 F1-score와 confusion matrix를 함께 확인합니다.
+
+### Current Tuning Result
+
+| Model | Train Accuracy | Test Accuracy | Test Macro F1 |
+|---|---:|---:|---:|
+| Baseline RandomForest | 0.9097 | 0.8819 | 0.8736 |
+| Tuned RandomForest | 0.9618 | 0.9028 | 0.8960 |
+
+선택된 parameter 조합은 `n_estimators=100`, `max_depth=None`, `min_samples_leaf=1`, `class_weight=None`입니다.
+
+튜닝 결과 전체 정확도와 macro F1-score는 개선되었지만, `normal` class recall은 아직 낮습니다. 따라서 이 모델은 실제 불량 원인을 확정하는 모델이 아니라, review 우선순위를 정하는 decision support model로 사용합니다.
 
 ## Engineering Boundary
 

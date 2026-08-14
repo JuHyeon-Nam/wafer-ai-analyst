@@ -100,7 +100,13 @@ def train_random_forest(
             "class_weight": class_weight,
             "random_state": random_state,
         },
-        "classification_report": classification_report(test[TARGET_COLUMN], test_pred, labels=labels, output_dict=True),
+        "classification_report": classification_report(
+            test[TARGET_COLUMN],
+            test_pred,
+            labels=labels,
+            output_dict=True,
+            zero_division=0,
+        ),
     }
 
     return TrainingResult(
@@ -133,7 +139,7 @@ def training_report_markdown(result: TrainingResult) -> str:
     params = metrics["parameters"]
 
     lines = [
-        "# RandomForest Baseline Training Report",
+        "# RandomForest Training Report",
         "",
         "## Summary",
         "",
@@ -183,9 +189,9 @@ def training_report_markdown(result: TrainingResult) -> str:
             "",
             "## Interpretation",
             "",
-            "This model is a baseline classifier trained on synthetic defect scenario features.",
+            "This model is a classifier trained on synthetic defect scenario features.",
             "The goal is not to claim production-level defect prediction, but to verify that the feature table can support a supervised ML workflow.",
-            "The next step is hyperparameter tuning and robustness checks against overfitting.",
+            "The confusion matrix and per-class metrics should be reviewed before using the model result as an engineering decision aid.",
         ]
     )
     return "\n".join(lines) + "\n"
