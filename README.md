@@ -117,6 +117,9 @@ Raw CSV / Excel
 | ML dataset prep | train/test split, feature column selection, validation report |
 | ML baseline | RandomForest defect classifier training and evaluation |
 | ML tuning | 72개 parameter 조합 비교, tuned RandomForest model selection |
+| ML inference | 실제 feature table을 model input으로 변환하고 predicted label/confidence 생성 |
+| Feature importance | 모델 판단에 영향을 준 전기 feature를 group별로 분석 |
+| Curve detail review | 선택 measurement의 raw IV/CV curve와 rule/ML 판단을 함께 확인 |
 
 ## Anomaly Logic
 
@@ -161,14 +164,15 @@ Real wafer feature table
 -> accuracy / macro F1-score / confusion matrix
 -> feature importance review
 -> dashboard comparison with rule-based result
+-> shot-level curve detail review
 ```
 
 Model evaluation:
 
 | Model | Train Accuracy | Test Accuracy | Test Macro F1 |
 |---|---:|---:|---:|
-| Baseline RandomForest | 0.9097 | 0.8819 | 0.8736 |
-| Tuned RandomForest | 0.9618 | 0.9028 | 0.8960 |
+| Baseline RandomForest | 0.9774 | 0.9583 | 0.9560 |
+| Tuned RandomForest | 0.9896 | 0.9722 | 0.9718 |
 
 Selected tuned model:
 
@@ -176,10 +180,10 @@ Selected tuned model:
 |---|---:|
 | `n_estimators` | `100` |
 | `max_depth` | `None` |
-| `min_samples_leaf` | `1` |
+| `min_samples_leaf` | `3` |
 | `class_weight` | `None` |
 
-튜닝 결과 test accuracy와 macro F1-score가 모두 개선되었습니다. 다만 `normal` class recall은 아직 낮아, 실제 공정 판단에서는 model prediction을 단정값이 아니라 review candidate로 사용하는 방향을 유지합니다.
+튜닝 결과 test accuracy와 macro F1-score가 모두 개선되었습니다. 다만 `normal` class 일부는 여전히 defect 후보와 혼동될 수 있어, 실제 공정 판단에서는 model prediction을 단정값이 아니라 review candidate로 사용하는 방향을 유지합니다.
 
 Planned synthetic labels:
 
@@ -293,6 +297,16 @@ python scripts/tune_random_forest.py \
   --metrics-output data/processed/rf_tuned_metrics.json
 ```
 
+Feature importance report를 생성합니다.
+
+```bash
+python scripts/analyze_feature_importance.py \
+  --input data/processed/rf_tuned_feature_importance.csv \
+  --report-output docs/FEATURE_IMPORTANCE_ANALYSIS.md \
+  --top-output data/processed/rf_tuned_top_features.csv \
+  --group-output data/processed/rf_tuned_feature_groups.csv
+```
+
 ## Engineering Boundary
 
 현재 데이터만으로 실제 공정 불량 원인을 확정할 수는 없습니다. 실제 root cause analysis에는 공정 recipe, 온도/압력/시간 조건, 증착 두께, 식각 조건, 도핑 조건, SEM/광학 이미지, 반복 측정 데이터가 추가로 필요합니다.
@@ -315,5 +329,7 @@ python scripts/tune_random_forest.py \
 - [`docs/RANDOM_FOREST_BASELINE.md`](docs/RANDOM_FOREST_BASELINE.md)
 - [`docs/RANDOM_FOREST_TUNING.md`](docs/RANDOM_FOREST_TUNING.md)
 - [`docs/RANDOM_FOREST_TUNED_MODEL.md`](docs/RANDOM_FOREST_TUNED_MODEL.md)
+- [`docs/FEATURE_IMPORTANCE_ANALYSIS.md`](docs/FEATURE_IMPORTANCE_ANALYSIS.md)
+- [`docs/DASHBOARD_ML_REVIEW.md`](docs/DASHBOARD_ML_REVIEW.md)
 - [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md)
 - [`docs/GITHUB_SETUP.md`](docs/GITHUB_SETUP.md)

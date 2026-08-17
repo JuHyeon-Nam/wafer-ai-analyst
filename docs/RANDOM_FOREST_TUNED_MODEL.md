@@ -5,9 +5,9 @@
 - Train rows: `576`
 - Test rows: `144`
 - Feature columns: `70`
-- Train accuracy: `0.9618`
-- Test accuracy: `0.9028`
-- Test macro F1-score: `0.8960`
+- Train accuracy: `0.9896`
+- Test accuracy: `0.9722`
+- Test macro F1-score: `0.9718`
 
 ## Model Parameters
 
@@ -15,7 +15,7 @@
 |---|---:|
 | `n_estimators` | `100` |
 | `max_depth` | `None` |
-| `min_samples_leaf` | `1` |
+| `min_samples_leaf` | `3` |
 | `class_weight` | `None` |
 | `random_state` | `42` |
 
@@ -27,9 +27,9 @@
 | capacitance_variation | 0 | 16 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | diode_contact_issue | 0 | 0 | 16 | 0 | 0 | 0 | 0 | 0 | 0 |
 | diode_leakage | 0 | 0 | 0 | 16 | 0 | 0 | 0 | 0 | 0 |
-| nmos_compliance_limit | 0 | 0 | 0 | 0 | 14 | 2 | 0 | 0 | 0 |
-| nmos_gate_leakage | 0 | 0 | 0 | 0 | 3 | 13 | 0 | 0 | 0 |
-| normal | 0 | 2 | 0 | 1 | 4 | 2 | 7 | 0 | 0 |
+| nmos_compliance_limit | 0 | 0 | 0 | 0 | 16 | 0 | 0 | 0 | 0 |
+| nmos_gate_leakage | 0 | 0 | 0 | 0 | 0 | 16 | 0 | 0 | 0 |
+| normal | 0 | 0 | 0 | 0 | 0 | 4 | 12 | 0 | 0 |
 | resistance_shift | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 16 | 0 |
 | resistor_nonlinearity | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 16 |
 
@@ -37,38 +37,38 @@
 
 | feature | importance |
 | --- | --- |
-| invalid_c_points | 0.08424392927070357 |
-| ifit_mae_a_missing | 0.0610703682802654 |
-| gate_leak_abs_max_a | 0.04573037499794516 |
-| ifit_max_abs_error_a_missing | 0.044263320126281015 |
-| c_abs_max_raw_f | 0.04125170648600106 |
-| compliance_hits | 0.04120664044585882 |
-| i_at_3v_a | 0.03306500476854698 |
-| i_at_0_7v_a | 0.027486773229845926 |
-| device_diode | 0.026777488463673074 |
-| resistance_ohm | 0.025784160485788393 |
-| i_at_minus_3v_a | 0.024449164870179674 |
-| iv_linearity_r2 | 0.0224024768289282 |
-| conductance_s | 0.021359157190599092 |
-| drain_i_mean_a | 0.021157667199999758 |
-| gate_v_max_v_missing | 0.019421056832313398 |
-| drain_v_mean_v | 0.01918014396529997 |
-| drain_i_at_gate_0v_a | 0.018561361450904392 |
-| gate_v_max_v | 0.01841399907148358 |
-| fit_intercept_a_missing | 0.01772478210705822 |
-| c_abs_max_raw_f_missing | 0.016423741192439605 |
+| drain_i_span_a | 0.07842490577332496 |
+| invalid_c_points | 0.050328716690130136 |
+| i_at_0v_a | 0.04624634634162186 |
+| c_abs_max_raw_f | 0.044199747921172754 |
+| ifit_max_abs_error_a_missing | 0.04308235304100844 |
+| ifit_mae_a_missing | 0.04058405108967647 |
+| compliance_hits | 0.03322851847068584 |
+| gate_leak_abs_max_a | 0.03262895983311282 |
+| i_at_0_7v_a | 0.02633089310630291 |
+| i_at_3v_a | 0.02538324548027181 |
+| iv_linearity_r2 | 0.02439840794904577 |
+| i_at_minus_3v_a | 0.02246793210749682 |
+| conductance_s | 0.019265012083454377 |
+| i_at_minus_3v_a_missing | 0.01837568998340694 |
+| resistance_ohm | 0.018008208443472774 |
+| c_range_f | 0.01775122580897735 |
+| drain_i_at_gate_0v_a_missing | 0.017354440567880196 |
+| c_abs_max_raw_f_missing | 0.017325352760533232 |
+| c_at_0v_f | 0.017202180584049025 |
+| c_max_f | 0.01702807073447896 |
 
 ## Per-Class Test Metrics
 
 | Label | Precision | Recall | F1-score | Support |
 |---|---:|---:|---:|---:|
 | `capacitance_outlier` | 1.0000 | 1.0000 | 1.0000 | 16 |
-| `capacitance_variation` | 0.8889 | 1.0000 | 0.9412 | 16 |
+| `capacitance_variation` | 1.0000 | 1.0000 | 1.0000 | 16 |
 | `diode_contact_issue` | 1.0000 | 1.0000 | 1.0000 | 16 |
-| `diode_leakage` | 0.9412 | 1.0000 | 0.9697 | 16 |
-| `nmos_compliance_limit` | 0.6667 | 0.8750 | 0.7568 | 16 |
-| `nmos_gate_leakage` | 0.7647 | 0.8125 | 0.7879 | 16 |
-| `normal` | 1.0000 | 0.4375 | 0.6087 | 16 |
+| `diode_leakage` | 1.0000 | 1.0000 | 1.0000 | 16 |
+| `nmos_compliance_limit` | 1.0000 | 1.0000 | 1.0000 | 16 |
+| `nmos_gate_leakage` | 0.8000 | 1.0000 | 0.8889 | 16 |
+| `normal` | 1.0000 | 0.7500 | 0.8571 | 16 |
 | `resistance_shift` | 1.0000 | 1.0000 | 1.0000 | 16 |
 | `resistor_nonlinearity` | 1.0000 | 1.0000 | 1.0000 | 16 |
 

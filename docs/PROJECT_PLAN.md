@@ -25,6 +25,9 @@ Wafer AI Analyst는 wafer electrical test raw data를 자동 분석하고, shot 
 - Baseline classification report
 - RandomForest hyperparameter tuning
 - Tuned model report and tuning result table
+- Feature importance analysis
+- Dashboard ML prediction view
+- Shot-level curve detail review
 
 ## Target Architecture
 
@@ -44,6 +47,7 @@ Synthetic defect scenario data
 -> defect type prediction
 -> model evaluation
 -> dashboard comparison
+-> shot-level curve review
 ```
 
 ## Schedule
@@ -55,7 +59,7 @@ Synthetic defect scenario data
 | 2026-08-12 | Synthetic feature dataset 생성 | ML-ready dataset, feature columns, validation report |
 | 2026-08-13 | RandomForest baseline 학습 | training script, saved model artifact, baseline report |
 | 2026-08-14 | Hyperparameter tuning | tuning result table, tuned model report |
-| 2026-08-15 | Feature importance 분석 | important feature report |
+| 2026-08-15 | Feature importance 분석 | important feature report, feature group summary |
 | 2026-08-16 | Dashboard ML prediction view 추가 | rule result와 ML prediction 비교 화면 |
 | 2026-08-17 | Curve viewer/detail review 개선 | device/shot별 상세 분석 화면 |
 | 2026-08-18 | 자동 report 생성 | Markdown/HTML analysis report |
@@ -98,12 +102,29 @@ Accuracy만 보면 정상 class가 많은 경우 성능이 과대평가될 수 �
 
 | Model | Train Accuracy | Test Accuracy | Test Macro F1 |
 |---|---:|---:|---:|
-| Baseline RandomForest | 0.9097 | 0.8819 | 0.8736 |
-| Tuned RandomForest | 0.9618 | 0.9028 | 0.8960 |
+| Baseline RandomForest | 0.9774 | 0.9583 | 0.9560 |
+| Tuned RandomForest | 0.9896 | 0.9722 | 0.9718 |
 
-선택된 parameter 조합은 `n_estimators=100`, `max_depth=None`, `min_samples_leaf=1`, `class_weight=None`입니다.
+선택된 parameter 조합은 `n_estimators=100`, `max_depth=None`, `min_samples_leaf=3`, `class_weight=None`입니다.
 
-튜닝 결과 전체 정확도와 macro F1-score는 개선되었지만, `normal` class recall은 아직 낮습니다. 따라서 이 모델은 실제 불량 원인을 확정하는 모델이 아니라, review 우선순위를 정하는 decision support model로 사용합니다.
+튜닝 결과 전체 정확도와 macro F1-score는 개선되었지만, `normal` class 일부는 여전히 defect 후보와 혼동될 수 있습니다. 따라서 이 모델은 실제 불량 원인을 확정하는 모델이 아니라, review 우선순위를 정하는 decision support model로 사용합니다.
+
+## Dashboard Integration
+
+Dashboard는 다음 흐름으로 구성합니다.
+
+```text
+feature table
+-> rule-based anomaly status
+-> tuned RandomForest prediction
+-> feature importance chart
+-> selected measurement raw curve
+-> beginner/engineer explanation
+```
+
+현재 dashboard는 `Overview`, `ML Prediction`, `Feature Importance`, `Curve Detail`, `Explanation` tab으로 구성되어 있습니다.
+
+특히 `Curve Detail` tab은 ML prediction만 보여주는 것이 아니라, 선택한 measurement의 raw IV/CV curve를 같이 보여줍니다. 이 때문에 모델 결과를 숫자로만 받아들이지 않고 실제 전기 curve shape와 함께 리뷰할 수 있습니다.
 
 ## Engineering Boundary
 

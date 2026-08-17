@@ -62,15 +62,15 @@ Model artifact와 processed CSV/JSON은 local generated output으로 관리합�
 
 | Metric | Value |
 |---|---:|
-| Train accuracy | 0.9097 |
-| Test accuracy | 0.8819 |
-| Test macro F1-score | 0.8736 |
+| Train accuracy | 0.9774 |
+| Test accuracy | 0.9583 |
+| Test macro F1-score | 0.9560 |
 
 ## Interpretation
 
 모델은 `capacitance_outlier`, `diode_contact_issue`, `resistance_shift`, `resistor_nonlinearity` 같은 명확한 synthetic scenario는 잘 구분했습니다.
 
-반면 `normal`, `nmos_compliance_limit`, `nmos_gate_leakage`는 일부 혼동이 있었습니다. 이는 정상 scenario가 모든 device에서 생성되고, NMOS 계열 scenario가 서로 feature 영역을 공유하기 때문입니다.
+반면 `normal` class는 일부 `nmos_gate_leakage`, `resistor_nonlinearity` 후보와 혼동이 있었습니다. 이는 정상 scenario가 모든 device에서 생성되고, 정상 variation과 약한 defect scenario가 일부 feature 영역을 공유하기 때문입니다.
 
 이 결과는 실패가 아니라 다음 tuning 포인트입니다.
 
