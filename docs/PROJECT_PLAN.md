@@ -28,6 +28,7 @@ Wafer AI Analyst는 wafer electrical test raw data를 자동 분석하고, shot 
 - Feature importance analysis
 - Dashboard ML prediction view
 - Shot-level curve detail review
+- Automated Markdown/HTML analysis report generation
 
 ## Target Architecture
 
@@ -48,6 +49,7 @@ Synthetic defect scenario data
 -> model evaluation
 -> dashboard comparison
 -> shot-level curve review
+-> Markdown/HTML report artifact
 ```
 
 ## Schedule
@@ -62,7 +64,7 @@ Synthetic defect scenario data
 | 2026-08-15 | Feature importance 분석 | important feature report, feature group summary |
 | 2026-08-16 | Dashboard ML prediction view 추가 | rule result와 ML prediction 비교 화면 |
 | 2026-08-17 | Curve viewer/detail review 개선 | device/shot별 상세 분석 화면 |
-| 2026-08-18 | 자동 report 생성 | Markdown/HTML analysis report |
+| 2026-08-18 | 자동 report 생성 | report generator, Markdown/HTML analysis report |
 | 2026-08-19 | Documentation and demo scenario 정리 | README/docs/demo script |
 | 2026-08-20 | End-to-end 검증 및 최종 정리 | reproducible release-ready workflow |
 
@@ -125,6 +127,22 @@ feature table
 현재 dashboard는 `Overview`, `ML Prediction`, `Feature Importance`, `Curve Detail`, `Explanation` tab으로 구성되어 있습니다.
 
 특히 `Curve Detail` tab은 ML prediction만 보여주는 것이 아니라, 선택한 measurement의 raw IV/CV curve를 같이 보여줍니다. 이 때문에 모델 결과를 숫자로만 받아들이지 않고 실제 전기 curve shape와 함께 리뷰할 수 있습니다.
+
+## Report Generation
+
+분석 결과는 `scripts/generate_analysis_report.py`로 Markdown과 HTML report artifact를 생성합니다.
+
+Report에는 다음 항목이 포함됩니다.
+
+- 전체 measurement/device/shot summary
+- rule-based review count
+- ML predicted label count
+- high-priority review candidate table
+- feature importance group summary
+- tuned model metrics
+- engineering boundary note
+
+이 기능은 dashboard 화면을 직접 보여주기 어려운 상황에서도 분석 결과를 문서로 제출하거나 공유할 수 있게 하기 위한 단계입니다.
 
 ## Engineering Boundary
 

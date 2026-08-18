@@ -1,4 +1,5 @@
 from pathlib import Path
+import json
 
 import pandas as pd
 import plotly.express as px
@@ -10,6 +11,7 @@ from src.wafer_ai_analyst.importance import summarize_feature_importance
 from src.wafer_ai_analyst.ml_inference import add_ml_predictions, load_model_artifact
 from src.wafer_ai_analyst.parsers import load_measurements, measurements_to_curve_frame
 from src.wafer_ai_analyst.process_reasoning import infer_process_candidates
+from src.wafer_ai_analyst.reporting import generate_analysis_report
 from src.wafer_ai_analyst.rules import apply_anomaly_rules
 
 
@@ -18,6 +20,7 @@ DEFAULT_FEATURE_PATH = "data/processed/features_preview.csv"
 DEFAULT_CURVE_PATH = "data/processed/curves_preview.csv"
 DEFAULT_MODEL_PATH = "models/random_forest_tuned.joblib"
 DEFAULT_IMPORTANCE_PATH = "data/processed/rf_tuned_feature_importance_preview.csv"
+DEFAULT_METRICS_PATH = "data/processed/rf_tuned_metrics_preview.json"
 
 
 st.set_page_config(page_title="Wafer AI Analyst", layout="wide")
@@ -227,6 +230,40 @@ def render_explanation(result: pd.DataFrame) -> None:
         st.code(selected["llm_prompt"], language="text")
 
 
+def render_report(result: pd.DataFrame, importance_path: str, metrics_path: str) -> None:
+    importance = pd.read_csv(importance_path) if Path(importance_path).exists() else None
+    model_metrics = _load_metrics(metrics_path)
+    report = generate_analysis_report(result, importance=importance, model_metrics=model_metrics)
+
+    left, right = st.columns(2)
+    with left:
+        st.download_button(
+            "Markdown Report 다운로드",
+            data=report.markdown,
+            file_name="wafer_analysis_report.md",
+            mime="text/markdown",
+            width="stretch",
+        )
+    with right:
+        st.download_button(
+            "HTML Report 다운로드",
+            data=report.html,
+            file_name="wafer_analysis_report.html",
+            mime="text/html",
+            width="stretch",
+        )
+
+    st.subheader("Report Preview")
+    st.markdown(report.markdown)
+
+
+def _load_metrics(metrics_path: str) -> dict[str, object] | None:
+    path = Path(metrics_path)
+    if not path.exists():
+        return None
+    return json.loads(path.read_text())
+
+
 st.title("Wafer AI Analyst")
 st.caption("반도체 웨이퍼 전기 측정 데이터 AI 품질 분석 에이전트")
 
@@ -237,6 +274,7 @@ with st.sidebar:
     curve_path = st.text_input("Demo curve CSV", DEFAULT_CURVE_PATH)
     model_path = st.text_input("Model artifact", DEFAULT_MODEL_PATH)
     importance_path = st.text_input("Feature importance CSV", DEFAULT_IMPORTANCE_PATH)
+    metrics_path = st.text_input("Model metrics JSON", DEFAULT_METRICS_PATH)
 
     if st.button("Raw Data 분석 실행"):
         result, curves = run_rule_pipeline(input_path)
@@ -257,8 +295,8 @@ if "result" not in st.session_state and Path(DEFAULT_FEATURE_PATH).exists():
 if "result" in st.session_state:
     result = st.session_state["result"]
     curves = st.session_state.get("curves", pd.DataFrame())
-    overview_tab, ml_tab, importance_tab, detail_tab, explanation_tab = st.tabs(
-        ["Overview", "ML Prediction", "Feature Importance", "Curve Detail", "Explanation"]
+    overview_tab, ml_tab, importance_tab, detail_tab, explanation_tab, report_tab = st.tabs(
+        ["Overview", "ML Prediction", "Feature Importance", "Curve Detail", "Explanation", "Report"]
     )
     with overview_tab:
         render_overview(result)
@@ -270,5 +308,7 @@ if "result" in st.session_state:
         render_curve_detail(result, curves)
     with explanation_tab:
         render_explanation(result)
+    with report_tab:
+        render_report(result, importance_path, metrics_path)
 else:
     st.info("Raw data path를 분석하거나 Demo 결과를 불러오세요.")

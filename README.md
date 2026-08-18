@@ -120,6 +120,7 @@ Raw CSV / Excel
 | ML inference | 실제 feature table을 model input으로 변환하고 predicted label/confidence 생성 |
 | Feature importance | 모델 판단에 영향을 준 전기 feature를 group별로 분석 |
 | Curve detail review | 선택 measurement의 raw IV/CV curve와 rule/ML 판단을 함께 확인 |
+| Report generation | 분석 결과를 Markdown/HTML report artifact로 자동 생성 |
 
 ## Anomaly Logic
 
@@ -165,6 +166,7 @@ Real wafer feature table
 -> feature importance review
 -> dashboard comparison with rule-based result
 -> shot-level curve detail review
+-> Markdown / HTML analysis report
 ```
 
 Model evaluation:
@@ -211,7 +213,7 @@ Planned synthetic labels:
 | 2026-08-15 | Feature importance 분석 | device/defect별 중요 feature 정리 |
 | 2026-08-16 | Dashboard ML prediction view 추가 | rule result와 ML prediction 비교 |
 | 2026-08-17 | Curve viewer와 shot-level detail view 개선 | measurement detail review 화면 |
-| 2026-08-18 | HTML/Markdown report 자동 생성 | analysis report artifact |
+| 2026-08-18 | HTML/Markdown report 자동 생성 | report generator, demo analysis report |
 | 2026-08-19 | README, docs, demo scenario 정리 | final documentation pass |
 | 2026-08-20 | End-to-end 검증 및 최종 정리 | reproducible demo and release notes |
 
@@ -307,6 +309,18 @@ python scripts/analyze_feature_importance.py \
   --group-output data/processed/rf_tuned_feature_groups.csv
 ```
 
+분석 결과를 Markdown/HTML report로 생성합니다.
+
+```bash
+python scripts/generate_analysis_report.py \
+  --features-input data/processed/features.csv \
+  --model-input models/random_forest_tuned.joblib \
+  --importance-input data/processed/rf_tuned_feature_importance.csv \
+  --metrics-input data/processed/rf_tuned_metrics.json \
+  --markdown-output docs/ANALYSIS_REPORT_DEMO.md \
+  --html-output reports/wafer_analysis_report.html
+```
+
 ## Engineering Boundary
 
 현재 데이터만으로 실제 공정 불량 원인을 확정할 수는 없습니다. 실제 root cause analysis에는 공정 recipe, 온도/압력/시간 조건, 증착 두께, 식각 조건, 도핑 조건, SEM/광학 이미지, 반복 측정 데이터가 추가로 필요합니다.
@@ -331,5 +345,6 @@ python scripts/analyze_feature_importance.py \
 - [`docs/RANDOM_FOREST_TUNED_MODEL.md`](docs/RANDOM_FOREST_TUNED_MODEL.md)
 - [`docs/FEATURE_IMPORTANCE_ANALYSIS.md`](docs/FEATURE_IMPORTANCE_ANALYSIS.md)
 - [`docs/DASHBOARD_ML_REVIEW.md`](docs/DASHBOARD_ML_REVIEW.md)
+- [`docs/ANALYSIS_REPORT_DEMO.md`](docs/ANALYSIS_REPORT_DEMO.md)
 - [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md)
 - [`docs/GITHUB_SETUP.md`](docs/GITHUB_SETUP.md)

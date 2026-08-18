@@ -50,7 +50,9 @@ FEATURE_GROUPS = {
 }
 
 FEATURE_EXPLANATIONS = {
+    "drain_i_span_a": "NMOS Id-Vg curve에서 drain current가 얼마나 변했는지 보는 값입니다. channel 동작 변화나 compliance 후보와 연결됩니다.",
     "invalid_c_points": "Capacitor C-V 측정에서 물리적으로 이상한 capacitance point가 얼마나 나왔는지 보는 값입니다.",
+    "i_at_0v_a": "Diode 0V 근처 전류입니다. 역방향/저전압 leakage 후보를 볼 때 사용됩니다.",
     "ifit_mae_a_missing": "Diode fitting error column의 결측 여부입니다. 특정 소자에서만 생기는 column 구조 차이를 모델이 구분에 사용한 신호입니다.",
     "gate_leak_abs_max_a": "NMOS gate에 새는 전류의 최대값입니다. gate oxide 또는 surface leakage 후보를 볼 때 중요합니다.",
     "ifit_max_abs_error_a_missing": "Diode fitting 최대 오차 column의 결측 여부입니다. 실제 물리량이라기보다 소자/측정 schema 구분 신호에 가깝습니다.",
@@ -60,6 +62,12 @@ FEATURE_EXPLANATIONS = {
     "i_at_0_7v_a": "Diode forward 동작을 보는 대표 전류 지점입니다.",
     "device_diode": "입력 row가 diode 측정인지 알려주는 one-hot feature입니다.",
     "resistance_ohm": "Resistor I-V curve slope로 계산한 저항값입니다.",
+    "iv_linearity_r2": "Resistor I-V curve가 얼마나 직선에 가까운지 보는 값입니다. 낮으면 contact, self-heating, compliance 후보를 확인합니다.",
+    "i_at_minus_3v_a": "음전압 -3V 지점 전류입니다. resistor slope 대칭성과 leakage 성향을 볼 때 사용됩니다.",
+    "conductance_s": "저항의 반대 개념인 conductance입니다. 전류가 얼마나 쉽게 흐르는지 나타냅니다.",
+    "c_range_f": "Capacitor C-V sweep 동안 capacitance가 얼마나 변했는지 보는 값입니다.",
+    "c_at_0v_f": "Capacitor 0V 지점 capacitance입니다. 박막 두께나 유전 특성 변화 후보를 볼 때 사용됩니다.",
+    "c_max_f": "Capacitor sweep에서 가장 큰 유효 capacitance 값입니다.",
 }
 
 
