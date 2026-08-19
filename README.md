@@ -121,6 +121,7 @@ Raw CSV / Excel
 | Feature importance | 모델 판단에 영향을 준 전기 feature를 group별로 분석 |
 | Curve detail review | 선택 measurement의 raw IV/CV curve와 rule/ML 판단을 함께 확인 |
 | Report generation | 분석 결과를 Markdown/HTML report artifact로 자동 생성 |
+| Demo workflow | 시연 전 artifact 점검, 발표 순서, 질문 대응 가이드 정리 |
 
 ## Anomaly Logic
 
@@ -214,7 +215,7 @@ Planned synthetic labels:
 | 2026-08-16 | Dashboard ML prediction view 추가 | rule result와 ML prediction 비교 |
 | 2026-08-17 | Curve viewer와 shot-level detail view 개선 | measurement detail review 화면 |
 | 2026-08-18 | HTML/Markdown report 자동 생성 | report generator, demo analysis report |
-| 2026-08-19 | README, docs, demo scenario 정리 | final documentation pass |
+| 2026-08-19 | README, docs, demo scenario 정리 | demo guide, demo check summary |
 | 2026-08-20 | End-to-end 검증 및 최종 정리 | reproducible demo and release notes |
 
 ## Quick Start
@@ -321,6 +322,29 @@ python scripts/generate_analysis_report.py \
   --html-output reports/wafer_analysis_report.html
 ```
 
+시연 전에 local demo artifact를 점검합니다.
+
+```bash
+python scripts/run_demo_check.py
+```
+
+정상 실행되면 `docs/DEMO_RUN_SUMMARY.md`가 생성되고, measurement 수, curve point 수, model metric, review candidate preview를 확인할 수 있습니다.
+
+## Demo Flow
+
+시연은 다음 순서로 진행합니다.
+
+```text
+README overview
+-> Dashboard Overview
+-> ML Prediction
+-> Feature Importance
+-> Curve Detail
+-> Report download
+```
+
+자세한 발표 순서와 질문 대응은 [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md)에 정리했습니다.
+
 ## Engineering Boundary
 
 현재 데이터만으로 실제 공정 불량 원인을 확정할 수는 없습니다. 실제 root cause analysis에는 공정 recipe, 온도/압력/시간 조건, 증착 두께, 식각 조건, 도핑 조건, SEM/광학 이미지, 반복 측정 데이터가 추가로 필요합니다.
@@ -346,5 +370,7 @@ python scripts/generate_analysis_report.py \
 - [`docs/FEATURE_IMPORTANCE_ANALYSIS.md`](docs/FEATURE_IMPORTANCE_ANALYSIS.md)
 - [`docs/DASHBOARD_ML_REVIEW.md`](docs/DASHBOARD_ML_REVIEW.md)
 - [`docs/ANALYSIS_REPORT_DEMO.md`](docs/ANALYSIS_REPORT_DEMO.md)
+- [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md)
+- [`docs/DEMO_RUN_SUMMARY.md`](docs/DEMO_RUN_SUMMARY.md)
 - [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md)
 - [`docs/GITHUB_SETUP.md`](docs/GITHUB_SETUP.md)

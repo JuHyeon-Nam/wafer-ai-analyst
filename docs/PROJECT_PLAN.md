@@ -29,6 +29,7 @@ Wafer AI Analyst는 wafer electrical test raw data를 자동 분석하고, shot 
 - Dashboard ML prediction view
 - Shot-level curve detail review
 - Automated Markdown/HTML analysis report generation
+- Demo guide and local artifact validation script
 
 ## Target Architecture
 
@@ -50,6 +51,7 @@ Synthetic defect scenario data
 -> dashboard comparison
 -> shot-level curve review
 -> Markdown/HTML report artifact
+-> demo check summary
 ```
 
 ## Schedule
@@ -65,7 +67,7 @@ Synthetic defect scenario data
 | 2026-08-16 | Dashboard ML prediction view 추가 | rule result와 ML prediction 비교 화면 |
 | 2026-08-17 | Curve viewer/detail review 개선 | device/shot별 상세 분석 화면 |
 | 2026-08-18 | 자동 report 생성 | report generator, Markdown/HTML analysis report |
-| 2026-08-19 | Documentation and demo scenario 정리 | README/docs/demo script |
+| 2026-08-19 | Documentation and demo scenario 정리 | demo guide, demo check summary |
 | 2026-08-20 | End-to-end 검증 및 최종 정리 | reproducible release-ready workflow |
 
 ## Model Plan
@@ -143,6 +145,23 @@ Report에는 다음 항목이 포함됩니다.
 - engineering boundary note
 
 이 기능은 dashboard 화면을 직접 보여주기 어려운 상황에서도 분석 결과를 문서로 제출하거나 공유할 수 있게 하기 위한 단계입니다.
+
+## Demo Validation
+
+시연 전에는 `scripts/run_demo_check.py`를 실행해 local artifact가 준비되어 있는지 확인합니다.
+
+검증 항목은 다음과 같습니다.
+
+- `features_preview.csv` 존재 여부
+- `curves_preview.csv` 존재 여부
+- tuned RandomForest model artifact 존재 여부
+- feature importance CSV 존재 여부
+- tuned model metrics JSON 존재 여부
+- measurement 수와 curve point 수
+- rule review count와 ML prediction count
+- 주요 review candidate preview
+
+발표 흐름과 예상 질문 답변은 `docs/DEMO_GUIDE.md`에 정리했습니다.
 
 ## Engineering Boundary
 
