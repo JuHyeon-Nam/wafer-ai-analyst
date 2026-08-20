@@ -30,6 +30,7 @@ Wafer AI Analyst는 wafer electrical test raw data를 자동 분석하고, shot 
 - Shot-level curve detail review
 - Automated Markdown/HTML analysis report generation
 - Demo guide and local artifact validation script
+- Final validation summary and release notes
 
 ## Target Architecture
 
@@ -52,6 +53,7 @@ Synthetic defect scenario data
 -> shot-level curve review
 -> Markdown/HTML report artifact
 -> demo check summary
+-> final validation summary
 ```
 
 ## Schedule
@@ -68,7 +70,7 @@ Synthetic defect scenario data
 | 2026-08-17 | Curve viewer/detail review 개선 | device/shot별 상세 분석 화면 |
 | 2026-08-18 | 자동 report 생성 | report generator, Markdown/HTML analysis report |
 | 2026-08-19 | Documentation and demo scenario 정리 | demo guide, demo check summary |
-| 2026-08-20 | End-to-end 검증 및 최종 정리 | reproducible release-ready workflow |
+| 2026-08-20 | End-to-end 검증 및 최종 정리 | final validation summary, release notes |
 
 ## Model Plan
 
@@ -162,6 +164,26 @@ Report에는 다음 항목이 포함됩니다.
 - 주요 review candidate preview
 
 발표 흐름과 예상 질문 답변은 `docs/DEMO_GUIDE.md`에 정리했습니다.
+
+## Final Validation
+
+최종 검증은 `scripts/run_final_validation.py`로 실행합니다.
+
+검증 항목은 다음과 같습니다.
+
+- 필수 source/document/local artifact 존재 여부
+- Python compile 가능 여부
+- 핵심 분석 module import 가능 여부
+- demo feature/curve/model artifact 연결 여부
+- tuned model metric 기준 통과 여부
+- Markdown/HTML report 생성 가능 여부
+
+현재 최종 검증 결과는 `64 PASS / 0 FAIL`입니다.
+
+최종 정리 문서는 다음 두 파일입니다.
+
+- `docs/FINAL_VALIDATION.md`
+- `docs/RELEASE_NOTES.md`
 
 ## Engineering Boundary
 

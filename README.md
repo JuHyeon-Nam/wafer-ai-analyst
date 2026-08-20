@@ -7,7 +7,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Domain-Semiconductor-0B2545?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Status-Active_Development-2E74B5?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Status-Release_Ready-2E74B5?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Target-2026.08.20-6F42C1?style=for-the-badge" />
 </p>
 
@@ -122,6 +122,7 @@ Raw CSV / Excel
 | Curve detail review | 선택 measurement의 raw IV/CV curve와 rule/ML 판단을 함께 확인 |
 | Report generation | 분석 결과를 Markdown/HTML report artifact로 자동 생성 |
 | Demo workflow | 시연 전 artifact 점검, 발표 순서, 질문 대응 가이드 정리 |
+| Final validation | compile/import/artifact/model/report 검증 결과 64개 PASS |
 
 ## Anomaly Logic
 
@@ -216,7 +217,7 @@ Planned synthetic labels:
 | 2026-08-17 | Curve viewer와 shot-level detail view 개선 | measurement detail review 화면 |
 | 2026-08-18 | HTML/Markdown report 자동 생성 | report generator, demo analysis report |
 | 2026-08-19 | README, docs, demo scenario 정리 | demo guide, demo check summary |
-| 2026-08-20 | End-to-end 검증 및 최종 정리 | reproducible demo and release notes |
+| 2026-08-20 | End-to-end 검증 및 최종 정리 | final validation summary, release notes |
 
 ## Quick Start
 
@@ -330,6 +331,14 @@ python scripts/run_demo_check.py
 
 정상 실행되면 `docs/DEMO_RUN_SUMMARY.md`가 생성되고, measurement 수, curve point 수, model metric, review candidate preview를 확인할 수 있습니다.
 
+최종 검증을 실행합니다.
+
+```bash
+python scripts/run_final_validation.py
+```
+
+현재 최종 검증 결과는 64개 check 전부 PASS입니다. 자세한 내용은 [`docs/FINAL_VALIDATION.md`](docs/FINAL_VALIDATION.md)에 정리했습니다.
+
 ## Demo Flow
 
 시연은 다음 순서로 진행합니다.
@@ -372,5 +381,7 @@ README overview
 - [`docs/ANALYSIS_REPORT_DEMO.md`](docs/ANALYSIS_REPORT_DEMO.md)
 - [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md)
 - [`docs/DEMO_RUN_SUMMARY.md`](docs/DEMO_RUN_SUMMARY.md)
+- [`docs/FINAL_VALIDATION.md`](docs/FINAL_VALIDATION.md)
+- [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)
 - [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md)
 - [`docs/GITHUB_SETUP.md`](docs/GITHUB_SETUP.md)
