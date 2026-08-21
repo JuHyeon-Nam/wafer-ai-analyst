@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DOCS = [
     "docs/PORTFOLIO_BRIEF.md",
     "docs/INTERVIEW_PLAYBOOK.md",
+    "docs/SELF_INTRO_AI_EXPERIENCE.md",
     "docs/DEMO_GUIDE.md",
     "docs/DEMO_RUN_SUMMARY.md",
     "docs/FINAL_VALIDATION.md",

@@ -8,7 +8,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Domain-Semiconductor-0B2545?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Status-Release_Ready-2E74B5?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Target-2026.08.20-6F42C1?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Release-2026.08.20-6F42C1?style=for-the-badge" />
 </p>
 
 <p align="center">
@@ -190,7 +190,7 @@ Selected tuned model:
 
 튜닝 결과 test accuracy와 macro F1-score가 모두 개선되었습니다. 다만 `normal` class 일부는 여전히 defect 후보와 혼동될 수 있어, 실제 공정 판단에서는 model prediction을 단정값이 아니라 review candidate로 사용하는 방향을 유지합니다.
 
-Planned synthetic labels:
+Synthetic defect labels:
 
 | Label | Pattern |
 |---|---|
@@ -203,22 +203,6 @@ Planned synthetic labels:
 | `capacitance_outlier` | CV raw value spike |
 | `nmos_gate_leakage` | gate leakage 증가 |
 | `nmos_compliance_limit` | drain current가 compliance 근처에서 제한 |
-
-## Roadmap to 2026-08-20
-
-| Date | Goal | Output |
-|---|---|---|
-| 2026-08-10 | README/project evidence 정리, dashboard preview asset 생성 | README refresh, dashboard/table preview images |
-| 2026-08-11 | Synthetic defect scenario 설계 | scenario schema, synthetic feature generator |
-| 2026-08-12 | Synthetic dataset 생성 및 검증 | ML-ready dataset, train/test split, validation report |
-| 2026-08-13 | RandomForest baseline 학습 | training script, saved model artifact, baseline report |
-| 2026-08-14 | 파라미터 튜닝 및 평가 | tuning result table, tuned model report |
-| 2026-08-15 | Feature importance 분석 | device/defect별 중요 feature 정리 |
-| 2026-08-16 | Dashboard ML prediction view 추가 | rule result와 ML prediction 비교 |
-| 2026-08-17 | Curve viewer와 shot-level detail view 개선 | measurement detail review 화면 |
-| 2026-08-18 | HTML/Markdown report 자동 생성 | report generator, demo analysis report |
-| 2026-08-19 | README, docs, demo scenario 정리 | demo guide, demo check summary |
-| 2026-08-20 | End-to-end 검증 및 최종 정리 | final validation summary, release notes |
 
 ## Quick Start
 
@@ -338,7 +322,7 @@ python scripts/run_demo_check.py
 python scripts/run_final_validation.py
 ```
 
-현재 최종 검증 결과는 64개 check 전부 PASS입니다. 자세한 내용은 [`docs/FINAL_VALIDATION.md`](docs/FINAL_VALIDATION.md)에 정리했습니다.
+현재 최종 검증 결과는 65개 check 전부 PASS입니다. 자세한 내용은 [`docs/FINAL_VALIDATION.md`](docs/FINAL_VALIDATION.md)에 정리했습니다.
 
 ## Demo Flow
 
@@ -363,6 +347,7 @@ README overview
 |---|---|
 | [`docs/PORTFOLIO_BRIEF.md`](docs/PORTFOLIO_BRIEF.md) | 프로젝트를 한 페이지로 요약 |
 | [`docs/INTERVIEW_PLAYBOOK.md`](docs/INTERVIEW_PLAYBOOK.md) | 30초/1분/3분 답변, 팀원별 말할 포인트, 기술 Q&A |
+| [`docs/SELF_INTRO_AI_EXPERIENCE.md`](docs/SELF_INTRO_AI_EXPERIENCE.md) | 자소서에 쓸 수 있는 AI 경험 문장과 개인별 어필 포인트 |
 | [`docs/PORTFOLIO_PACKET.md`](docs/PORTFOLIO_PACKET.md) | 포트폴리오/면접 관련 문서를 하나로 묶은 패킷 |
 
 패킷은 아래 명령으로 다시 생성할 수 있습니다.
@@ -402,6 +387,7 @@ python scripts/generate_portfolio_packet.py
 - [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)
 - [`docs/PORTFOLIO_BRIEF.md`](docs/PORTFOLIO_BRIEF.md)
 - [`docs/INTERVIEW_PLAYBOOK.md`](docs/INTERVIEW_PLAYBOOK.md)
+- [`docs/SELF_INTRO_AI_EXPERIENCE.md`](docs/SELF_INTRO_AI_EXPERIENCE.md)
 - [`docs/PORTFOLIO_PACKET.md`](docs/PORTFOLIO_PACKET.md)
 - [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md)
 - [`docs/GITHUB_SETUP.md`](docs/GITHUB_SETUP.md)
