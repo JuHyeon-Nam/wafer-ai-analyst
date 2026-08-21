@@ -122,7 +122,8 @@ Raw CSV / Excel
 | Curve detail review | 선택 measurement의 raw IV/CV curve와 rule/ML 판단을 함께 확인 |
 | Report generation | 분석 결과를 Markdown/HTML report artifact로 자동 생성 |
 | Demo workflow | 시연 전 artifact 점검, 발표 순서, 질문 대응 가이드 정리 |
-| Final validation | compile/import/artifact/model/report 검증 결과 64개 PASS |
+| Final validation | compile/import/artifact/model/report 검증 결과 65개 PASS |
+| Portfolio packet | 프로젝트 요약, 면접 답변, 데모 가이드를 하나의 문서로 정리 |
 
 ## Anomaly Logic
 
@@ -354,6 +355,22 @@ README overview
 
 자세한 발표 순서와 질문 대응은 [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md)에 정리했습니다.
 
+## Portfolio Prep
+
+포트폴리오 제출과 면접 준비용 문서는 다음 파일을 기준으로 봅니다.
+
+| Document | Purpose |
+|---|---|
+| [`docs/PORTFOLIO_BRIEF.md`](docs/PORTFOLIO_BRIEF.md) | 프로젝트를 한 페이지로 요약 |
+| [`docs/INTERVIEW_PLAYBOOK.md`](docs/INTERVIEW_PLAYBOOK.md) | 30초/1분/3분 답변, 팀원별 말할 포인트, 기술 Q&A |
+| [`docs/PORTFOLIO_PACKET.md`](docs/PORTFOLIO_PACKET.md) | 포트폴리오/면접 관련 문서를 하나로 묶은 패킷 |
+
+패킷은 아래 명령으로 다시 생성할 수 있습니다.
+
+```bash
+python scripts/generate_portfolio_packet.py
+```
+
 ## Engineering Boundary
 
 현재 데이터만으로 실제 공정 불량 원인을 확정할 수는 없습니다. 실제 root cause analysis에는 공정 recipe, 온도/압력/시간 조건, 증착 두께, 식각 조건, 도핑 조건, SEM/광학 이미지, 반복 측정 데이터가 추가로 필요합니다.
@@ -383,5 +400,8 @@ README overview
 - [`docs/DEMO_RUN_SUMMARY.md`](docs/DEMO_RUN_SUMMARY.md)
 - [`docs/FINAL_VALIDATION.md`](docs/FINAL_VALIDATION.md)
 - [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)
+- [`docs/PORTFOLIO_BRIEF.md`](docs/PORTFOLIO_BRIEF.md)
+- [`docs/INTERVIEW_PLAYBOOK.md`](docs/INTERVIEW_PLAYBOOK.md)
+- [`docs/PORTFOLIO_PACKET.md`](docs/PORTFOLIO_PACKET.md)
 - [`docs/PROJECT_PLAN.md`](docs/PROJECT_PLAN.md)
 - [`docs/GITHUB_SETUP.md`](docs/GITHUB_SETUP.md)

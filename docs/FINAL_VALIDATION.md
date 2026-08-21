@@ -1,9 +1,9 @@
 # Final Validation Summary
 
-- Generated at: `2026-08-20 09:03:19`
+- Generated at: `2026-08-21 09:09:54`
 - Validation scope: `current working tree at runtime`
-- Checks: `64`
-- Passed: `64`
+- Checks: `65`
+- Passed: `65`
 - Failed: `0`
 
 ## Project Snapshot
@@ -55,6 +55,7 @@
 | `compile:scripts/train_random_forest.py` | `PASS` | compiled |
 | `compile:scripts/run_demo_check.py` | `PASS` | compiled |
 | `compile:scripts/generate_synthetic_dataset.py` | `PASS` | compiled |
+| `compile:scripts/generate_portfolio_packet.py` | `PASS` | compiled |
 | `compile:app.py` | `PASS` | compiled |
 | `import:src.wafer_ai_analyst.parsers` | `PASS` | imported |
 | `import:src.wafer_ai_analyst.features` | `PASS` | imported |

@@ -4,6 +4,17 @@
 
 Wafer AI Analyst is organized as a reproducible local demo for semiconductor electrical test analysis.
 
+## 2026-08-21
+
+Portfolio and interview preparation documents were added after release validation.
+
+| Area | Result |
+|---|---|
+| Portfolio brief | One-page project summary with problem, solution, result, and boundary |
+| Interview playbook | 30-second, 1-minute, 3-minute answers and technical Q&A |
+| Team talking points | Role-based explanation points for each team member |
+| Portfolio packet | Combined Markdown packet for review and rehearsal |
+
 ## What Is Included
 
 | Area | Result |

@@ -178,7 +178,7 @@ Report에는 다음 항목이 포함됩니다.
 - tuned model metric 기준 통과 여부
 - Markdown/HTML report 생성 가능 여부
 
-현재 최종 검증 결과는 `64 PASS / 0 FAIL`입니다.
+현재 최종 검증 결과는 `65 PASS / 0 FAIL`입니다.
 
 최종 정리 문서는 다음 두 파일입니다.
 
